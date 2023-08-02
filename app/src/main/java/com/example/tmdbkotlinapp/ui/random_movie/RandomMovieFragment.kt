@@ -58,7 +58,7 @@ class RandomMovieFragment : Fragment() {
         randomMovieViewModel.movie.observe(viewLifecycleOwner){
             Log.i("Movie", it.toString())
         }*/
-        lifecycleScope.launch {
+        /*lifecycleScope.launch {
             Log.i(
                 "Random movie list",
                 iMovieRepository.getRandomMovieList(1, 2000, "Action")[0].toString()
@@ -67,7 +67,7 @@ class RandomMovieFragment : Fragment() {
             Log.i("Movie details", iMovieRepository.getMovieDetails(11).toString())
             Log.i("Total pages", iMovieRepository.getTotalPages(2000, "Action").toString())
             Log.i("Movie cast", iCastRepository.getMovieCast(11)[0].toString())
-        }
+        }*/
     }
 
 }

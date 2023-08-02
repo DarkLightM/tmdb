@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface MovieService {
 
     companion object{
-        const val BEARER_TOKEN=""
+        const val BEARER_TOKEN="eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4YmViZjAyMDY1ZDEyMGJmMGQyMmUyOWFhNzM3NjIxZCIsInN1YiI6IjY0Yzc5NjQzZWVjNWI1NThlYThiNjIyOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WpSTBvcWIoXd8OktGiijRoFlSxSPHqTfFDGAO3Y2Fhs"
     }
 
     @GET("discover/movie?")
