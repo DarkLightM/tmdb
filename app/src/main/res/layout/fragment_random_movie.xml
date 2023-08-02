@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".ui.random_movie.RandomMovieFragment">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/dark_blue"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/getRandomFilmButton"
+        app:layout_constraintLeft_toLeftOf="@id/getRandomFilmButton">
+
+        <EditText
+            android:id="@+id/editYear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="no"
+            android:hint="@string/year"
+            android:inputType="textCapWords"
+            android:textAlignment="center"
+            android:textAppearance="@style/description_style"
+            android:textColorHint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="75dp"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="@color/dark_blue"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toTopOf="@id/getRandomFilmButton"
+        app:layout_constraintRight_toRightOf="@id/getRandomFilmButton">
+
+        <EditText
+            android:id="@+id/editGenre"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="no"
+            android:hint="@string/genre"
+            android:inputType="textCapWords"
+            android:textAlignment="center"
+            android:textAppearance="@style/description_style"
+            android:textColorHint="@color/white" />
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/getRandomFilmButton"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/circle"
+        android:text="@string/get_random_movie"
+        android:textAppearance="@style/description_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
