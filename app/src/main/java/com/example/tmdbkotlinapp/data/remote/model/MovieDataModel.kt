@@ -16,6 +16,7 @@ data class MovieDataModel(
     val releaseDate: String,
     @SerializedName("vote_average")
     val rating: Float,
+    val popularity: Float,
     @SerializedName("poster_path")
     val posterPath: String,
     val cast: List<Actor>?,
@@ -28,6 +29,7 @@ data class MovieDataModel(
             this.overview,
             this.releaseDate,
             this.rating,
+            this.popularity,
             this.posterPath,
             this.cast
         )

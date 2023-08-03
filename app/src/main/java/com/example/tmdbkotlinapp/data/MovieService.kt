@@ -24,6 +24,7 @@ interface MovieService {
 
     @GET("movie/popular")
     suspend fun getPopular(
+        @Query("page") page: Int,
         @Header("Authorization") token: String = TOKEN,
     ): MovieListDataModel
 

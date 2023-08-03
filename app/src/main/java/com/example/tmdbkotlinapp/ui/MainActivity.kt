@@ -1,12 +1,10 @@
-package com.example.tmdbkotlinapp
+package com.example.tmdbkotlinapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -23,8 +21,6 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController = navHostFragment.navController
-        Log.i("Nav Host Fragment", navHostFragment.toString())
-        Log.i("Nav Controller", navController.toString())
 
         navView.setupWithNavController(navController)
     }

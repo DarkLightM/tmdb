@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tmdbkotlinapp.domain.GetRandomMovieUseCase
-import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import com.example.tmdbkotlinapp.domain.usecase.GetRandomMovieUseCase
 import com.example.tmdbkotlinapp.domain.models.Movie
 import kotlinx.coroutines.launch
 import javax.inject.Inject
