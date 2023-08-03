@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TMDB Kotlin App</string>
+    <string name="popular_films">Популярные фильмы</string>
+    <string name="get_random_movie">Получить фильм</string>
+    <string name="genre">Жанр</string>
+    <string name="year">Год</string>
 </resources>
