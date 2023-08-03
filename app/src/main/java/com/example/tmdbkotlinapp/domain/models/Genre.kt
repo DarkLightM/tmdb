@@ -1,4 +1,4 @@
-package com.example.tmdbkotlinapp.models
+package com.example.tmdbkotlinapp.domain.models
 
 import com.google.gson.annotations.SerializedName
 
