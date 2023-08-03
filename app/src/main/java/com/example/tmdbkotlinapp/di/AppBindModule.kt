@@ -1,10 +1,9 @@
 package com.example.tmdbkotlinapp.di
 
-import com.example.tmdbkotlinapp.api.repository.cast.CastRepositoryImpl
-import com.example.tmdbkotlinapp.api.repository.cast.CastRepository
-import com.example.tmdbkotlinapp.api.repository.movie.MovieRepository
-import com.example.tmdbkotlinapp.api.repository.movie.MovieRepositoryImpl
-import com.example.tmdbkotlinapp.api.usecase.movie.GetRandomMovieUseCase
+import com.example.tmdbkotlinapp.data.repository.CastRepositoryImpl
+import com.example.tmdbkotlinapp.domain.repository.CastRepository
+import com.example.tmdbkotlinapp.domain.repository.MovieRepository
+import com.example.tmdbkotlinapp.data.repository.MovieRepositoryImpl
 import dagger.Binds
 import dagger.Module
 

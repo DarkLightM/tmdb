@@ -1,7 +1,9 @@
-package com.example.tmdbkotlinapp.api.repository.movie
+package com.example.tmdbkotlinapp.data.repository
 
-import com.example.tmdbkotlinapp.api.MovieService
-import com.example.tmdbkotlinapp.models.movie.Movie
+import com.example.tmdbkotlinapp.domain.repository.MovieRepository
+import com.example.tmdbkotlinapp.data.MovieService
+import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import com.example.tmdbkotlinapp.domain.models.Movie
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val movieService: MovieService) :
@@ -16,7 +18,7 @@ class MovieRepositoryImpl @Inject constructor(private val movieService: MovieSer
     }
 
     override suspend fun getMovieDetails(id: Int): Movie {
-        return movieService.getMovieDetails(id)
+        return movieService.getMovieDetails(id).toDomain()
     }
 
     override suspend fun getTotalPages(year: Int, genre: String): Int {

@@ -1,4 +1,4 @@
-package com.example.tmdbkotlinapp.api
+package com.example.tmdbkotlinapp.data
 
 import dagger.Module
 import dagger.Provides

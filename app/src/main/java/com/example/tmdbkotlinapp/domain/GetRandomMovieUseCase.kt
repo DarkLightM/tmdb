@@ -1,7 +1,8 @@
-package com.example.tmdbkotlinapp.api.usecase.movie
+package com.example.tmdbkotlinapp.domain
 
-import com.example.tmdbkotlinapp.api.repository.movie.MovieRepository
-import com.example.tmdbkotlinapp.models.movie.Movie
+import com.example.tmdbkotlinapp.domain.repository.MovieRepository
+import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import com.example.tmdbkotlinapp.domain.models.Movie
 import javax.inject.Inject
 
 class GetRandomMovieUseCase @Inject constructor(private val movieRepository: MovieRepository) {

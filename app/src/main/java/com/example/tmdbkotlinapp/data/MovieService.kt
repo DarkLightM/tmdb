@@ -1,8 +1,8 @@
-package com.example.tmdbkotlinapp.api
+package com.example.tmdbkotlinapp.data
 
-import com.example.tmdbkotlinapp.models.actor.ActorDataModel
-import com.example.tmdbkotlinapp.models.movie.Movie
-import com.example.tmdbkotlinapp.models.movie.MovieListDataModel
+import com.example.tmdbkotlinapp.data.remote.model.ActorDataModel
+import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import com.example.tmdbkotlinapp.data.remote.model.MovieListDataModel
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -31,7 +31,7 @@ interface MovieService {
     suspend fun getMovieDetails(
         @Path("movie_id") id: Int,
         @Header("Authorization") token: String = TOKEN,
-    ): Movie
+    ): MovieDataModel
 
     @GET("movie/{movie_id}/credits")
     suspend fun getMovieCast(

@@ -1,6 +1,7 @@
-package com.example.tmdbkotlinapp.api.repository.movie
+package com.example.tmdbkotlinapp.domain.repository
 
-import com.example.tmdbkotlinapp.models.movie.Movie
+import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import com.example.tmdbkotlinapp.domain.models.Movie
 
 interface MovieRepository {
 

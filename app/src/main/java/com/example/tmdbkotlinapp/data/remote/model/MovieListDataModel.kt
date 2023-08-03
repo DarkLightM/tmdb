@@ -1,5 +1,6 @@
-package com.example.tmdbkotlinapp.models.movie
+package com.example.tmdbkotlinapp.data.remote.model
 
+import com.example.tmdbkotlinapp.domain.models.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieListDataModel(

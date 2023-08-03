@@ -1,5 +1,6 @@
-package com.example.tmdbkotlinapp.models.actor
+package com.example.tmdbkotlinapp.data.remote.model
 
+import com.example.tmdbkotlinapp.domain.models.Actor
 import com.google.gson.annotations.SerializedName
 
 data class ActorDataModel(
