@@ -4,4 +4,7 @@
     <string name="get_random_movie">Получить фильм</string>
     <string name="genre">Жанр</string>
     <string name="year">Год</string>
+    <string name="popular_movie">Популярное</string>
+    <string name="random_movie">Случайное</string>
+    <string name="saved_movie">Сохраненное</string>
 </resources>

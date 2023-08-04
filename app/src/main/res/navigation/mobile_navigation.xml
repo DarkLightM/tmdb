@@ -10,4 +10,19 @@
         android:name="com.example.tmdbkotlinapp.ui.random_movie.RandomMovieFragment"
         android:label="fragment_random_movie"
         tools:layout="@layout/fragment_random_movie" />
+    <fragment
+        android:id="@+id/popularMoviesFragment"
+        android:name="com.example.tmdbkotlinapp.ui.popular_movies.PopularMoviesFragment"
+        android:label="PopularMoviesFragment"
+        tools:layout="@layout/fragment_popular_movies"/>
+    <fragment
+        android:id="@+id/savedMoviesFragment"
+        android:name="com.example.tmdbkotlinapp.ui.saved_movies.SavedMoviesFragment"
+        android:label="SavedMoviesFragment"
+        tools:layout="@layout/fragment_saved_movies"/>
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.tmdbkotlinapp.ui.movie_details.MovieDetailsFragment"
+        android:label="fragment_movie_details"
+        tools:layout="@layout/fragment_movie_details" />
 </navigation>
