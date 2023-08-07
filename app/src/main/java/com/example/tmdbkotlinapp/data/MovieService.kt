@@ -8,6 +8,7 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 import com.example.tmdbkotlinapp.BuildConfig
+import retrofit2.Response
 
 interface MovieService {
 
@@ -26,7 +27,7 @@ interface MovieService {
     suspend fun getPopular(
         @Query("page") page: Int,
         @Header("Authorization") token: String = TOKEN,
-    ): MovieListDataModel
+    ): Response<MovieListDataModel>
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(

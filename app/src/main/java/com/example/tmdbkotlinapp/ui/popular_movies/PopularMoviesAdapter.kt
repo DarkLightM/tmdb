@@ -2,12 +2,8 @@ package com.example.tmdbkotlinapp.ui.popular_movies
 
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.recyclerview.widget.ListAdapter
-import android.widget.TextView
-import androidx.core.content.res.TypedArrayUtils.getString
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -16,13 +12,14 @@ import com.example.tmdbkotlinapp.databinding.PopularMovieCardBinding
 import com.example.tmdbkotlinapp.domain.models.Movie
 
 class PopularMoviesAdapter :
-    ListAdapter<Movie, PopularMoviesAdapter.ViewHolder>(PopularMovieDiffCallback()) {
+    PagingDataAdapter<Movie, PopularMoviesAdapter.ViewHolder>(PopularMovieDiffCallback()) {
     class ViewHolder(private val binding: PopularMovieCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private val context = binding.root.context
 
         fun bind(movie: Movie) {
+            Log.i("Adapter", movie.toString())
             binding.moviePoster.load(movie.posterPath)
             binding.movieName.text =
                 String.format(context.getString(R.string.movie_name_format), movie.originalTitle)
@@ -46,7 +43,8 @@ class PopularMoviesAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(currentList[position])
+        getItem(position)?.let {
+            holder.bind(it) }
     }
 
     class PopularMovieDiffCallback : DiffUtil.ItemCallback<Movie>() {

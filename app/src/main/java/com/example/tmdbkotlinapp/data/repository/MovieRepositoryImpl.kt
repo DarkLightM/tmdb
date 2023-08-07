@@ -1,9 +1,15 @@
 package com.example.tmdbkotlinapp.data.repository
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import com.example.tmdbkotlinapp.data.MovieService
-import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
 import com.example.tmdbkotlinapp.domain.models.Movie
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(private val movieService: MovieService) :
@@ -13,8 +19,23 @@ class MovieRepositoryImpl @Inject constructor(private val movieService: MovieSer
         return movieService.getRandomMovie(page, year, genre).toDomain()
     }
 
-    override suspend fun getPopularMovieList(page: Int): List<Movie> {
-        return movieService.getPopular(page).toDomain().sortedByDescending { it.popularity }
+    override fun getPopularMovieList(): LiveData<PagingData<Movie>> {
+        val pager = Pager(
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                PopularMoviesPagingSource(movieService)
+            }
+        )
+        val liveData = pager.liveData
+
+        liveData.observeForever { pagingData ->
+            Log.i("Repository", pagingData.toString())
+        }
+
+        return liveData
     }
 
     override suspend fun getMovieDetails(id: Int): Movie {

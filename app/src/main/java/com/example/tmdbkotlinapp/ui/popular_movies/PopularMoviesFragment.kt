@@ -2,16 +2,20 @@ package com.example.tmdbkotlinapp.ui.popular_movies
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Movie
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
@@ -24,6 +28,8 @@ class PopularMoviesFragment : Fragment() {
     private var _binding: FragmentPopularMoviesBinding? = null
 
     private val binding get() = _binding!!
+
+    private var adapter: PopularMoviesAdapter? = null
 
     override fun onAttach(context: Context) {
         MainApplication.appComponent.inject(this)
@@ -40,18 +46,22 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) {
-            createRecyclerView(it)
-        }
+        collectUiState()
+        initView()
+
     }
 
-    private fun createRecyclerView(popularMovies: List<Movie>) {
-        requireActivity().runOnUiThread {
-            val popularMovieRecyclerView = binding.popularMoviesRecyclerView
-            val popularMoviesAdapter = PopularMoviesAdapter()
-            popularMoviesAdapter.submitList(popularMovies)
-            popularMovieRecyclerView.adapter = popularMoviesAdapter
-        }
+    private fun initView() {
+        val adapter = PopularMoviesAdapter()
+        binding.popularMoviesRecyclerView.adapter = adapter
     }
 
+    private fun collectUiState() {
+        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) { movies ->
+            if (movies == null) Log.i("Fragment", "Movie is null")
+            else Log.i("Fragment", movies.toString())
+            adapter?.submitData(viewLifecycleOwner.lifecycle, movies)
+        }
+
+    }
 }
