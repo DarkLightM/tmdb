@@ -12,37 +12,37 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.tmdbkotlinapp.R
+import com.example.tmdbkotlinapp.databinding.PopularMovieCardBinding
 import com.example.tmdbkotlinapp.domain.models.Movie
 
 class PopularMoviesAdapter :
     ListAdapter<Movie, PopularMoviesAdapter.ViewHolder>(PopularMovieDiffCallback()) {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val defaultImageUrl = "https://image.tmdb.org/t/p/w500%s"
-        private val context = view.context
+    class ViewHolder(private val binding: PopularMovieCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        private val moviePoster = view.findViewById<ImageView>(R.id.moviePoster)
-        private val movieName = view.findViewById<TextView>(R.id.movieName)
-        private val movieReleaseDate = view.findViewById<TextView>(R.id.movieReleaseDate)
-        private val movieRating = view.findViewById<TextView>(R.id.movieRating)
+        private val context = binding.root.context
 
         fun bind(movie: Movie) {
-            Log.i("Poster URL", defaultImageUrl.format(movie.posterPath))
-            moviePoster.load(defaultImageUrl.format(movie.posterPath))
-            movieName.text =
+            binding.moviePoster.load(movie.posterPath)
+            binding.movieName.text =
                 String.format(context.getString(R.string.movie_name_format), movie.originalTitle)
-            movieReleaseDate.text = String.format(
-                context.getString(R.string.movie_release_date_format), movie.releaseDate
-            )
-            movieRating.text = String.format(
-                context.getString(R.string.movie_rating_format), movie.rating.toString()
-            )
+            binding.movieReleaseDate.text =
+                String.format(
+                    context.getString(R.string.movie_release_date_format),
+                    movie.releaseDate
+                )
+            binding.movieRating.text =
+                String.format(
+                    context.getString(R.string.movie_rating_format),
+                    movie.rating.toString()
+                )
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.popular_movie_card, parent, false)
-        return ViewHolder(view)
+        val binding =
+            PopularMovieCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

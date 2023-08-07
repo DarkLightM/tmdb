@@ -1,10 +1,10 @@
 package com.example.tmdbkotlinapp.data.remote.model
 
-import android.util.Log
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieListDataModel(
+    @SerializedName("page")
     val page: Int,
     @SerializedName("results")
     val movieList: List<MovieDataModel>,
@@ -12,7 +12,7 @@ data class MovieListDataModel(
     val totalPages: Int,
 ) {
     fun toDomain(): List<Movie> {
-        Log.i("Popular movie list", this.movieList.toString())
+        val defaultImageUrl = "https://image.tmdb.org/t/p/w500%s"
         return this.movieList.map {
             Movie(
                 movieId = it.movieId,
@@ -22,7 +22,7 @@ data class MovieListDataModel(
                 releaseDate = it.releaseDate,
                 rating = it.rating,
                 popularity = it.popularity,
-                posterPath = it.posterPath,
+                posterPath = defaultImageUrl.format(it.posterPath),
                 cast = null,
             )
         }
