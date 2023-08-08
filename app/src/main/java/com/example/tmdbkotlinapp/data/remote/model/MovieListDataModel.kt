@@ -4,13 +4,15 @@ import com.example.tmdbkotlinapp.domain.models.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieListDataModel(
+    @SerializedName("page")
     val page: Int,
     @SerializedName("results")
-    val movieList: List<Movie>,
+    val movieList: List<MovieDataModel>,
     @SerializedName("total_pages")
     val totalPages: Int,
 ) {
     fun toDomain(): List<Movie> {
+        val defaultImageUrl = "https://image.tmdb.org/t/p/w500%s"
         return this.movieList.map {
             Movie(
                 movieId = it.movieId,
@@ -19,7 +21,8 @@ data class MovieListDataModel(
                 overview = it.overview,
                 releaseDate = it.releaseDate,
                 rating = it.rating,
-                posterPath = it.posterPath,
+                popularity = it.popularity,
+                posterPath = defaultImageUrl.format(it.posterPath),
                 cast = null,
             )
         }

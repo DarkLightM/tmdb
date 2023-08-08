@@ -13,8 +13,8 @@ class MovieRepositoryImpl @Inject constructor(private val movieService: MovieSer
         return movieService.getRandomMovie(page, year, genre).toDomain()
     }
 
-    override suspend fun getPopularMovieList(): List<Movie> {
-        return movieService.getPopular().toDomain()
+    override suspend fun getPopularMovieList(page: Int): List<Movie> {
+        return movieService.getPopular(page).toDomain().sortedByDescending { it.popularity }
     }
 
     override suspend fun getMovieDetails(id: Int): Movie {

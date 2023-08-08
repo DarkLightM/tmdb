@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class ActorDataModel(
     @SerializedName("id")
     val movieId: Int,
+    @SerializedName("cast")
     val cast: List<Actor>,
 ) {
     fun toDomain(): List<Actor> {

@@ -6,7 +6,7 @@
     android:background="@drawable/gradient_background">
 
     <TextView
-        android:id="@+id/popular_movies_title"
+        android:id="@+id/popularMoviesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
@@ -18,10 +18,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/popularMoviesRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
         android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="@id/popular_movies_title"
-        app:layout_constraintTop_toBottomOf="@id/popular_movies_title" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/popularMoviesTitle" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
-package com.example.tmdbkotlinapp.domain
+package com.example.tmdbkotlinapp.domain.usecase
 
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
-import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
 import com.example.tmdbkotlinapp.domain.models.Movie
 import javax.inject.Inject
 

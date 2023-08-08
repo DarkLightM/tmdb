@@ -11,13 +11,17 @@ data class MovieDataModel(
     val originalTitle: String,
     @SerializedName("genre_ids")
     val genreList: List<Int>,
+    @SerializedName("overview")
     val overview: String,
     @SerializedName("release_date")
     val releaseDate: String,
     @SerializedName("vote_average")
     val rating: Float,
+    @SerializedName("popularity")
+    val popularity: Float,
     @SerializedName("poster_path")
     val posterPath: String,
+    @SerializedName("cast")
     val cast: List<Actor>?,
 ) {
     fun toDomain(): Movie {
@@ -28,6 +32,7 @@ data class MovieDataModel(
             this.overview,
             this.releaseDate,
             this.rating,
+            this.popularity,
             this.posterPath,
             this.cast
         )

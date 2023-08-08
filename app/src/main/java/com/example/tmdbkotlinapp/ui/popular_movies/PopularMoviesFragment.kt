@@ -1,32 +1,57 @@
 package com.example.tmdbkotlinapp.ui.popular_movies
 
-import androidx.lifecycle.ViewModelProvider
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.tmdbkotlinapp.R
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
+import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.domain.models.Movie
+import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PopularMoviesFragment()
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var viewModel: PopularMoviesViewModel
+    private val popularMoviesViewModel by viewModels<PopularMoviesViewModel> { viewModelFactory }
+
+    private var _binding: FragmentPopularMoviesBinding? = null
+
+    private val binding get() = _binding!!
+
+    override fun onAttach(context: Context) {
+        MainApplication.appComponent.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_popular_movies, container, false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPopularMoviesBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PopularMoviesViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) {
+            createRecyclerView(it)
+        }
+    }
+
+    private fun createRecyclerView(popularMovies: List<Movie>) {
+        requireActivity().runOnUiThread {
+            val popularMovieRecyclerView = binding.popularMoviesRecyclerView
+            val popularMoviesAdapter = PopularMoviesAdapter()
+            popularMoviesAdapter.submitList(popularMovies)
+            popularMovieRecyclerView.adapter = popularMoviesAdapter
+        }
     }
 
 }
