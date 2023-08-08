@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/default_margin"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="100dp"
@@ -12,16 +13,19 @@
         app:cardCornerRadius="50dp">
 
         <ImageView
+            android:id="@+id/actorImage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:layout_gravity="center"
+        android:id="@+id/actorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textAppearance="@style/description_style"
         android:textSize="12sp"
-        tools:text="Фамилия Имя"/>
+        tools:text="Фамилия Имя" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

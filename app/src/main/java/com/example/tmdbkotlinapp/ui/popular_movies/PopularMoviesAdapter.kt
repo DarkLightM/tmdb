@@ -1,9 +1,12 @@
 package com.example.tmdbkotlinapp.ui.popular_movies
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.PopularMovieCardBinding
 import com.example.tmdbkotlinapp.domain.models.Movie
 
@@ -17,8 +20,16 @@ class PopularMoviesAdapter :
     }
 
     override fun onBindViewHolder(holder: PopularMoviesViewHolder, position: Int) {
-        getItem(position)?.let {
-            holder.bind(it)
+        getItem(position)?.let { movie ->
+            holder.bind(movie)
+            holder.itemView.setOnClickListener { view ->
+                val bundle = Bundle()
+                bundle.putInt("movieId", movie.movieId)
+                val navController = view.findNavController()
+                navController.navigate(
+                    R.id.action_popularMoviesFragment_to_movieDetailsFragment, bundle
+                )
+            }
         }
     }
 

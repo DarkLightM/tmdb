@@ -1,20 +1,19 @@
 package com.example.tmdbkotlinapp.ui.movie_details
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import coil.load
 import com.example.tmdbkotlinapp.MainApplication
-import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
-import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
-import com.example.tmdbkotlinapp.ui.popular_movies.PopularMoviesViewModel
+import com.example.tmdbkotlinapp.domain.models.Actor
+import com.example.tmdbkotlinapp.domain.models.Genre
+import com.example.tmdbkotlinapp.domain.models.Movie
 import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
@@ -43,16 +42,41 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        movieDetailsViewModel.getMovieDetails(11)
-        movieDetailsViewModel.getMovieCast(11)
-
-        movieDetailsViewModel.movie.observe(viewLifecycleOwner){
-            Log.i("Details fragment", it.toString())
+        val movieId = this.arguments?.getInt("movieId")
+        movieId?.let {
+            movieDetailsViewModel.getMovieDetails(it)
+            movieDetailsViewModel.getMovieCast(it)
         }
 
-        movieDetailsViewModel.cast.observe(viewLifecycleOwner){
-            Log.i("Details fragment", it.toString())
+        movieDetailsViewModel.movie.observe(viewLifecycleOwner) { movie ->
+            setStatic(movie)
+            movie.genreList?.let { genreList -> setGenreRecycler(genreList) }
+        }
+
+        movieDetailsViewModel.cast.observe(viewLifecycleOwner) {
+            setCastRecycler(it)
         }
     }
 
+    private fun setStatic(movie: Movie) {
+        binding.movieBcgPoster.load(movie.posterPath)
+        binding.movieName.text = movie.originalTitle
+        binding.movieRating.text = movie.rating.toString()
+        binding.movieReleaseDate.text = movie.releaseDate
+        binding.movieDescription.text = movie.overview
+    }
+
+    private fun setCastRecycler(cast: List<Actor>) {
+        val castRecycler = binding.castRecyclerView
+        val adapter = ActorCardAdapter()
+        adapter.submitList(cast)
+        castRecycler.adapter = adapter
+    }
+
+    private fun setGenreRecycler(genres: List<Genre>) {
+        val genreRecycler = binding.genreRecyclerView
+        val adapter = GenreCardAdapter()
+        adapter.submitList(genres)
+        genreRecycler.adapter = adapter
+    }
 }
