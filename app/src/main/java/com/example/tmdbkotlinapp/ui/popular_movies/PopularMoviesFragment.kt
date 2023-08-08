@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
-import com.example.tmdbkotlinapp.domain.models.Movie
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
@@ -24,6 +22,8 @@ class PopularMoviesFragment : Fragment() {
     private var _binding: FragmentPopularMoviesBinding? = null
 
     private val binding get() = _binding!!
+
+    private var adapter: PopularMoviesAdapter? = null
 
     override fun onAttach(context: Context) {
         MainApplication.appComponent.inject(this)
@@ -40,18 +40,19 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) {
-            createRecyclerView(it)
-        }*/
+        initView()
+        collectUiState()
     }
 
-    private fun createRecyclerView(popularMovies: List<Movie>) {
-        requireActivity().runOnUiThread {
-            val popularMovieRecyclerView = binding.popularMoviesRecyclerView
-            val popularMoviesAdapter = PopularMoviesAdapter()
-            popularMoviesAdapter.submitList(popularMovies)
-            popularMovieRecyclerView.adapter = popularMoviesAdapter
+    private fun initView() {
+        adapter = PopularMoviesAdapter()
+        binding.popularMoviesRecyclerView.adapter = adapter
+    }
+
+    private fun collectUiState() {
+        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) { movies ->
+            adapter?.submitData(viewLifecycleOwner.lifecycle, movies)
         }
-    }
 
+    }
 }
