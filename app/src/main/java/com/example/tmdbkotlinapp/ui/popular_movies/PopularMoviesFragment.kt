@@ -2,20 +2,14 @@ package com.example.tmdbkotlinapp.ui.popular_movies
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
-import com.example.tmdbkotlinapp.domain.models.Movie
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesFragment : Fragment() {
@@ -46,20 +40,17 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        collectUiState()
         initView()
-
+        collectUiState()
     }
 
     private fun initView() {
-        val adapter = PopularMoviesAdapter()
+        adapter = PopularMoviesAdapter()
         binding.popularMoviesRecyclerView.adapter = adapter
     }
 
     private fun collectUiState() {
         popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) { movies ->
-            if (movies == null) Log.i("Fragment", "Movie is null")
-            else Log.i("Fragment", movies.toString())
             adapter?.submitData(viewLifecycleOwner.lifecycle, movies)
         }
 
