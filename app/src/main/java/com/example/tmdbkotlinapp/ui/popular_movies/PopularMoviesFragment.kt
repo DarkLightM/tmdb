@@ -40,9 +40,9 @@ class PopularMoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) {
+        /*popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) {
             createRecyclerView(it)
-        }
+        }*/
     }
 
     private fun createRecyclerView(popularMovies: List<Movie>) {

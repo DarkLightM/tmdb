@@ -23,7 +23,6 @@ data class MovieListDataModel(
                 rating = it.rating,
                 popularity = it.popularity,
                 posterPath = defaultImageUrl.format(it.posterPath),
-                cast = null,
             )
         }
     }
