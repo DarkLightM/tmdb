@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import kotlinx.coroutines.launch
@@ -11,17 +12,18 @@ import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(private val movieRepository: MovieRepository) :
     ViewModel() {
-    private val _popularMovieList = MutableLiveData<List<Movie>>()
-    private val page: Int = 1
-    val popularMovieList : LiveData<List<Movie>> get() = _popularMovieList
+    private val _popularMovieList = MutableLiveData<PagingData<Movie>>()
+    val popularMovieList: LiveData<PagingData<Movie>> get() = _popularMovieList
 
-    init{
-        getPopularMovieList()
+    init {
+        viewModelScope.launch {
+            getMovies()
+        }
     }
 
-    private fun getPopularMovieList(){
-        viewModelScope.launch {
-            _popularMovieList.postValue(movieRepository.getPopularMovieList(page))
+    private suspend fun getMovies() {
+        movieRepository.getPopularMovieList().collect {
+            _popularMovieList.postValue(it)
         }
     }
 }

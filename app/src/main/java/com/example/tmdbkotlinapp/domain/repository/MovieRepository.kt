@@ -1,13 +1,14 @@
 package com.example.tmdbkotlinapp.domain.repository
 
-import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
+import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.domain.models.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
     suspend fun getRandomMovieList(page: Int, year: Int, genre: String): List<Movie>
 
-    suspend fun getPopularMovieList(page: Int): List<Movie>
+    fun getPopularMovieList(): Flow<PagingData<Movie>>
 
     suspend fun getMovieDetails(id: Int): Movie
 

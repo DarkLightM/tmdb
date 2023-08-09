@@ -7,9 +7,9 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppBindModule::class, NetworkModule::class, ViewModelModule::class])
+@Component(modules = [AppBindModule::class, NetworkModule::class, ViewModelModule::class, PagingModule::class])
 interface AppComponent {
-    fun viewModelFactory() : ViewModelFactory
+    fun viewModelFactory(): ViewModelFactory
     fun inject(fragment: RandomMovieFragment)
 
     fun inject(fragment: PopularMoviesFragment)
