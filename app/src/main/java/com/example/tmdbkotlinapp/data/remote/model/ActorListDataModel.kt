@@ -5,8 +5,10 @@ import com.example.tmdbkotlinapp.domain.models.Actor
 import com.google.gson.annotations.SerializedName
 
 data class ActorListDataModel(
-    @SerializedName("id") val movieId: Int,
-    @SerializedName("cast") val cast: List<ActorDataModel>,
+    @SerializedName("id")
+    val movieId: Int,
+    @SerializedName("cast")
+    val cast: List<ActorDataModel>,
 ) {
     fun toDomain(): List<Actor> {
         return this.cast.map {

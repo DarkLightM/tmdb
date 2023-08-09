@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import coil.load
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
@@ -64,6 +65,11 @@ class MovieDetailsFragment : Fragment() {
         binding.movieRating.text = movie.rating.toString()
         binding.movieReleaseDate.text = movie.releaseDate
         binding.movieDescription.text = movie.overview
+
+        binding.backArrow.setOnClickListener{
+            val navController = it.findNavController()
+            navController.navigateUp()
+        }
     }
 
     private fun setCastRecycler(cast: List<Actor>) {

@@ -9,8 +9,8 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="300dp"
-        android:layout_height="500dp"
+        android:layout_width="@dimen/popular_card_width"
+        android:layout_height="@dimen/popular_card_height"
         app:cardCornerRadius="50dp">
 
         <ImageView
@@ -23,7 +23,9 @@
     <TextView
         android:id="@+id/movieName"
         android:layout_marginTop="@dimen/default_margin"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:layout_height="wrap_content"
         android:textAppearance="@style/description_style"
         tools:text="Название" />
