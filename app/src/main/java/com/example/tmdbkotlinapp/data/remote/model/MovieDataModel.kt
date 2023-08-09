@@ -3,6 +3,7 @@ package com.example.tmdbkotlinapp.data.remote.model
 import com.example.tmdbkotlinapp.data.repository.DEFAULT_IMG_URL
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.utils.NumberUtils
 import com.google.gson.annotations.SerializedName
 
 data class MovieDataModel(
@@ -30,7 +31,7 @@ data class MovieDataModel(
             this.genreList,
             this.overview,
             this.releaseDate,
-            this.rating,
+            rating = NumberUtils.formatFloat(this.rating),
             this.popularity,
             DEFAULT_IMG_URL.format(this.posterPath),
         )

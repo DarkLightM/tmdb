@@ -21,7 +21,7 @@ class PopularMoviesFragment : Fragment() {
 
     private var _binding: FragmentPopularMoviesBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding)
 
     private var adapter: PopularMoviesAdapter? = null
 

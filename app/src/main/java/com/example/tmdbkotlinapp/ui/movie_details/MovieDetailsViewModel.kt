@@ -21,15 +21,9 @@ class MovieDetailsViewModel @Inject constructor(
     private val _cast = MutableLiveData<List<Actor>>()
     val cast: LiveData<List<Actor>> get() = _cast
 
-
-    fun getMovieDetails(id: Int){
+    fun loadMovieDetails(id: Int){
         viewModelScope.launch {
             _movie.postValue(movieRepository.getMovieDetails(id))
-        }
-    }
-
-    fun getMovieCast(id: Int){
-        viewModelScope.launch {
             _cast.postValue(castRepository.getMovieCast(id))
         }
     }

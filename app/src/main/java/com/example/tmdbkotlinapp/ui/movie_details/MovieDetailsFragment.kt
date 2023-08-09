@@ -26,7 +26,7 @@ class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
 
-    private val binding get() = _binding!!
+    private val binding get() = requireNotNull(_binding)
 
     override fun onAttach(context: Context) {
         MainApplication.appComponent.inject(this)
@@ -45,8 +45,7 @@ class MovieDetailsFragment : Fragment() {
 
         val movieId = this.arguments?.getInt("movieId")
         movieId?.let {
-            movieDetailsViewModel.getMovieDetails(it)
-            movieDetailsViewModel.getMovieCast(it)
+            movieDetailsViewModel.loadMovieDetails(it)
         }
 
         movieDetailsViewModel.movie.observe(viewLifecycleOwner) { movie ->
