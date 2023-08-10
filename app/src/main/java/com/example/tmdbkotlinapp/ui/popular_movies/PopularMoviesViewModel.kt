@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +24,7 @@ class PopularMoviesViewModel @Inject constructor(private val movieRepository: Mo
     }
 
     private suspend fun getMovies() {
-        movieRepository.getPopularMovieList().collect {
+        movieRepository.getPopularMovieList().cachedIn(viewModelScope).collect() {
             _popularMovieList.postValue(it)
         }
     }

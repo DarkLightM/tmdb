@@ -19,7 +19,7 @@ class PopularMoviesViewHolder(private val binding: PopularMovieCardBinding) :
             context.getString(R.string.movie_release_date_format), movie.releaseDate
         )
         binding.movieRating.text = String.format(
-            context.getString(R.string.movie_rating_format), movie.rating.toString()
+            context.getString(R.string.movie_rating_format), movie.rating
         )
     }
 }

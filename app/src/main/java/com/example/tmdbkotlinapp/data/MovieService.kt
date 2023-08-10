@@ -1,14 +1,14 @@
 package com.example.tmdbkotlinapp.data
 
-import com.example.tmdbkotlinapp.data.remote.model.ActorDataModel
+import com.example.tmdbkotlinapp.BuildConfig
+import com.example.tmdbkotlinapp.data.remote.model.ActorListDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieListDataModel
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
-import com.example.tmdbkotlinapp.BuildConfig
-import retrofit2.Response
 
 interface MovieService {
 
@@ -39,5 +39,5 @@ interface MovieService {
     suspend fun getMovieCast(
         @Path("movie_id") id: Int,
         @Header("Authorization") token: String = TOKEN,
-    ) : ActorDataModel
+    ): ActorListDataModel
 }

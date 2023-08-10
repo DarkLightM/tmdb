@@ -1,6 +1,8 @@
 package com.example.tmdbkotlinapp.data.remote.model
 
+import com.example.tmdbkotlinapp.data.repository.DEFAULT_IMG_URL
 import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.utils.formatFloat
 import com.google.gson.annotations.SerializedName
 
 data class MovieListDataModel(
@@ -12,7 +14,6 @@ data class MovieListDataModel(
     val totalPages: Int,
 ) {
     fun toDomain(): List<Movie> {
-        val defaultImageUrl = "https://image.tmdb.org/t/p/w500%s"
         return this.movieList.map {
             Movie(
                 movieId = it.movieId,
@@ -20,10 +21,9 @@ data class MovieListDataModel(
                 genreList = it.genreList,
                 overview = it.overview,
                 releaseDate = it.releaseDate,
-                rating = it.rating,
+                rating = formatFloat(it.rating),
                 popularity = it.popularity,
-                posterPath = defaultImageUrl.format(it.posterPath),
-                cast = null,
+                posterPath = DEFAULT_IMG_URL.format(it.posterPath),
             )
         }
     }

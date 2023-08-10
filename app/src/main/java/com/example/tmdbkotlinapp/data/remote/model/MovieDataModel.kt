@@ -1,7 +1,9 @@
 package com.example.tmdbkotlinapp.data.remote.model
 
-import com.example.tmdbkotlinapp.domain.models.Actor
+import com.example.tmdbkotlinapp.data.repository.DEFAULT_IMG_URL
+import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.utils.formatFloat
 import com.google.gson.annotations.SerializedName
 
 data class MovieDataModel(
@@ -9,8 +11,8 @@ data class MovieDataModel(
     val movieId: Int,
     @SerializedName("original_title")
     val originalTitle: String,
-    @SerializedName("genre_ids")
-    val genreList: List<Int>,
+    @SerializedName("genres")
+    val genreList: List<Genre>,
     @SerializedName("overview")
     val overview: String,
     @SerializedName("release_date")
@@ -21,8 +23,6 @@ data class MovieDataModel(
     val popularity: Float,
     @SerializedName("poster_path")
     val posterPath: String,
-    @SerializedName("cast")
-    val cast: List<Actor>?,
 ) {
     fun toDomain(): Movie {
         return Movie(
@@ -31,10 +31,9 @@ data class MovieDataModel(
             this.genreList,
             this.overview,
             this.releaseDate,
-            this.rating,
+            rating = formatFloat(this.rating),
             this.popularity,
-            this.posterPath,
-            this.cast
+            DEFAULT_IMG_URL.format(this.posterPath),
         )
     }
 }
