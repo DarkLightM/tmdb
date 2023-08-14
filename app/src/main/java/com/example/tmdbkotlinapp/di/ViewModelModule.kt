@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tmdbkotlinapp.ui.movie_details.MovieDetailsViewModel
 import com.example.tmdbkotlinapp.ui.popular_movies.PopularMoviesViewModel
 import com.example.tmdbkotlinapp.ui.random_movie.RandomMovieViewModel
+import com.example.tmdbkotlinapp.ui.saved_movies.SavedMoviesViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -29,4 +30,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MovieDetailsViewModel::class)
     abstract fun bindMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SavedMoviesViewModel::class)
+    abstract fun bindSavedMoviesViewModel(savedMoviesViewModel: SavedMoviesViewModel): ViewModel
 }

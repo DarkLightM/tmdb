@@ -34,6 +34,7 @@ data class MovieDataModel(
             rating = formatFloat(this.rating),
             this.popularity,
             DEFAULT_IMG_URL.format(this.posterPath),
+            null,
         )
     }
 }

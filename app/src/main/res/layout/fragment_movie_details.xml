@@ -21,8 +21,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/backArrowBcg"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/circle_diameter"
+            android:layout_height="@dimen/circle_diameter"
             android:layout_margin="@dimen/default_margin"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
@@ -61,8 +61,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ratingBcg"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/circle_diameter"
+            android:layout_height="@dimen/circle_diameter"
             android:layout_margin="@dimen/default_margin"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
@@ -78,6 +78,25 @@
                 android:textColor="@color/dark_blue"
                 android:textSize="20sp"
                 tools:text="5.0" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/likeBcg"
+            android:layout_width="@dimen/circle_diameter"
+            android:layout_height="@dimen/circle_diameter"
+            android:layout_margin="@dimen/default_margin"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="24dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ratingBcg">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/likeButton"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_like_untapped" />
 
         </androidx.cardview.widget.CardView>
 

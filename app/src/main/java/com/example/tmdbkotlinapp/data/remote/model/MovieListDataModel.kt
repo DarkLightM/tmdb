@@ -22,8 +22,9 @@ data class MovieListDataModel(
                 overview = it.overview,
                 releaseDate = it.releaseDate,
                 rating = formatFloat(it.rating),
-                popularity = it.popularity,
                 posterPath = DEFAULT_IMG_URL.format(it.posterPath),
+                popularity = it.popularity,
+                cast = null,
             )
         }
     }

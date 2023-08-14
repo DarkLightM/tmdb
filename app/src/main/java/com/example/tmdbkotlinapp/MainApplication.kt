@@ -2,6 +2,7 @@ package com.example.tmdbkotlinapp
 
 import android.app.Application
 import com.example.tmdbkotlinapp.di.AppComponent
+import com.example.tmdbkotlinapp.di.ContextModule
 import com.example.tmdbkotlinapp.di.DaggerAppComponent
 
 class MainApplication: Application() {
@@ -11,6 +12,6 @@ class MainApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder().contextModule(ContextModule(this)).build()
     }
 }
