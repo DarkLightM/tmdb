@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import coil.load
 import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Actor
@@ -45,10 +46,8 @@ class MovieDetailsFragment : Fragment() {
 
         val movieId = this.arguments?.getInt("movieId")
         movieId?.let {
-            if (this.arguments?.getBoolean("fromDb") == true)
-                movieDetailsViewModel.loadMovieDetailsFromDb(it)
-            else
-                movieDetailsViewModel.loadMovieDetailsFromServer(it)
+            val source = this.arguments?.getSerializable("source", DataSource::class.java)
+            movieDetailsViewModel.loadMovieDetailsFromServer(it, requireNotNull(source))
         }
 
         setButtons()

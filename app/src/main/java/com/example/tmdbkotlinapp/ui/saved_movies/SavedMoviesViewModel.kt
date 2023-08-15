@@ -5,23 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmdbkotlinapp.domain.models.Movie
-import com.example.tmdbkotlinapp.domain.usecase.GetMovieListFromDbUseCase
-import kotlinx.coroutines.Dispatchers
+import com.example.tmdbkotlinapp.domain.usecase.GetSavedMoviesUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SavedMoviesViewModel @Inject constructor(private val getMovieListFromDbUseCase: GetMovieListFromDbUseCase) :
+class SavedMoviesViewModel @Inject constructor(private val getSavedMoviesUseCase: GetSavedMoviesUseCase) :
     ViewModel() {
     private val _movieList = MutableLiveData<List<Movie>>()
     val movieList: LiveData<List<Movie>> get() = _movieList
 
     init {
-        getSavedMovieList()
+        viewModelScope.launch {
+            getSavedMovieList()
+        }
     }
 
-    private fun getSavedMovieList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _movieList.postValue(getMovieListFromDbUseCase.invoke())
+    private suspend fun getSavedMovieList() {
+        getSavedMoviesUseCase().collect{
+            _movieList.postValue(it)
         }
     }
 }

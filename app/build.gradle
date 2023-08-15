@@ -9,12 +9,12 @@ appProperties.load(project.rootProject.file("app.properties").newDataInputStream
 
 android {
     namespace 'com.example.tmdbkotlinapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.tmdbkotlinapp"
-        minSdk 24
-        targetSdk 33
+        minSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -103,4 +103,7 @@ dependencies {
     // Room
     implementation "androidx.room:room-ktx:2.5.2"
     kapt "androidx.room:room-compiler:2.5.2"
+
+    // GSON
+    implementation 'com.google.code.gson:gson:2.9.0'
 }

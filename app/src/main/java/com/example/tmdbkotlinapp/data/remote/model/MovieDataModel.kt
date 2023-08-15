@@ -26,15 +26,15 @@ data class MovieDataModel(
 ) {
     fun toDomain(): Movie {
         return Movie(
-            this.movieId,
-            this.originalTitle,
-            this.genreList,
-            this.overview,
-            this.releaseDate,
+            movieId = this.movieId,
+            originalTitle = this.originalTitle,
+            genreList = this.genreList,
+            overview = this.overview,
+            releaseDate = this.releaseDate,
             rating = formatFloat(this.rating),
-            this.popularity,
-            DEFAULT_IMG_URL.format(this.posterPath),
-            null,
+            popularity = this.popularity,
+            posterPath = DEFAULT_IMG_URL.format(this.posterPath),
+            cast = null,
         )
     }
 }

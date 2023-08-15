@@ -30,25 +30,22 @@ class MovieRepositoryImpl @Inject constructor(
         return pager.flow
     }
 
-    override suspend fun getMovieDetails(id: Int): Movie {
-        return movieService.getMovieDetails(id).toDomain()
+    override suspend fun getMovieDetails(id: Int, source: DataSource): Movie {
+        return if (source == DataSource.LOCAL) requireNotNull(movieDao.getMovieById(id)?.toDomain())
+        else movieService.getMovieDetails(id).toDomain()
     }
 
     override suspend fun getTotalPages(year: Int, genre: String): Int {
         return movieService.getRandomMovie(1, year, genre).totalPages
     }
 
-    override suspend fun getMovieListFromDb(): List<MovieEntity> {
+    override suspend fun getSavedMovies(): Flow<List<MovieEntity>> {
         return movieDao.getSavedMovies()
-    }
-
-    override suspend fun getMovieById(id: Int): Movie {
-        return movieDao.getMovieById(id).toDomain()
     }
 
     override suspend fun saveMovieInDb(movie: Movie, actors: List<Actor>) {
         val movieEntity = MovieEntity(
-            id = 0,
+            id = movie.movieId,
             title = movie.originalTitle ?: "",
             overview = movie.overview,
             releaseDate = movie.releaseDate,
