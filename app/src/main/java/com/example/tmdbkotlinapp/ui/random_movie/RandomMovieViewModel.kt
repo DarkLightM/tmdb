@@ -11,12 +11,12 @@ import javax.inject.Inject
 
 class RandomMovieViewModel @Inject constructor(private val getRandomMovieUseCase: GetRandomMovieUseCase) :
     ViewModel() {
-    private val _movieDataModel = MutableLiveData<Movie>()
-    val movieDataModel: LiveData<Movie> get() = _movieDataModel
+    private val _movie = MutableLiveData<Movie>()
+    val movie: LiveData<Movie> get() = _movie
 
     fun getRandomMovie(year: Int, genre: String){
         viewModelScope.launch {
-            _movieDataModel.postValue(getRandomMovieUseCase.invoke(year, genre))
+            _movie.postValue(getRandomMovieUseCase.invoke(year, genre))
         }
     }
 }

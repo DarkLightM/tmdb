@@ -1,15 +1,23 @@
 package com.example.tmdbkotlinapp.ui.random_movie
 
 import android.content.Context
+import android.icu.util.Calendar
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.R
+import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentRandomMovieBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheet
+import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheetViewModel
 import javax.inject.Inject
 
 class RandomMovieFragment : Fragment() {
@@ -17,7 +25,9 @@ class RandomMovieFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val randomMovieViewModel by viewModels<RandomMovieViewModel> { viewModelFactory }
+    private val randomMovieViewModel by activityViewModels<RandomMovieViewModel> { viewModelFactory }
+
+    private val genreBottomSheetViewModel by activityViewModels<GenreBottomSheetViewModel> { viewModelFactory }
 
     private lateinit var binding: FragmentRandomMovieBinding
 
@@ -36,6 +46,67 @@ class RandomMovieFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                validateInput(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        }
+
+        binding.editYear.addTextChangedListener(textWatcher)
+
+        binding.editGenreCardView.setOnClickListener {
+            GenreBottomSheet().show(parentFragmentManager, "genreTag")
+        }
+
+        genreBottomSheetViewModel.selectedGenre.observe(viewLifecycleOwner) {
+            binding.selectedGenre.text = it
+        }
+
+        binding.getRandomFilmButton.setOnClickListener {
+            if (validateInput(binding.editYear.text.toString()) && binding.selectedGenre.text != null) {
+                randomMovieViewModel.getRandomMovie(
+                    binding.editYear.text.toString().toInt(),
+                    binding.selectedGenre.text.toString()
+                )
+            }
+            randomMovieViewModel.movie.observe(viewLifecycleOwner){
+                val bundle = Bundle()
+                bundle.putInt("movieId", it.movieId)
+                bundle.putSerializable("source", DataSource.REMOTE)
+                val navController = view.findNavController()
+                navController.navigate(
+                    R.id.action_randomMovieFragment_to_movieDetailsFragment, bundle
+                )
+            }
+        }
     }
 
+    private fun validateInput(input: String): Boolean {
+        if (input.isNotEmpty()) {
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val inputValue = input.toIntOrNull()
+
+            return if (inputValue == null) {
+                binding.editYear.error = requireActivity().getString(R.string.year_type_error)
+                false
+            } else if (inputValue < 1900 || inputValue > currentYear) {
+                binding.editYear.error = String.format(
+                    requireActivity().getString((R.string.year_number_error)),
+                    currentYear
+                )
+                false
+            } else {
+                binding.editYear.error = null
+                true
+            }
+        } else {
+            binding.editYear.error = null
+        }
+        return false
+    }
 }

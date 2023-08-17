@@ -15,8 +15,6 @@ interface MovieRepository {
 
     suspend fun getMovieDetails(id: Int, source: DataSource): Movie
 
-    suspend fun getTotalPages(year: Int, genre: String): Int
-
     suspend fun getSavedMovies(): Flow<List<MovieEntity>>
 
     suspend fun saveMovieInDb(movie: Movie, actors: List<Actor>)

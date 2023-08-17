@@ -47,7 +47,7 @@ class MovieDetailsFragment : Fragment() {
         val movieId = this.arguments?.getInt("movieId")
         movieId?.let {
             val source = this.arguments?.getSerializable("source", DataSource::class.java)
-            movieDetailsViewModel.loadMovieDetailsFromServer(it, requireNotNull(source))
+            movieDetailsViewModel.loadMovieDetails(it, requireNotNull(source))
         }
 
         setButtons()

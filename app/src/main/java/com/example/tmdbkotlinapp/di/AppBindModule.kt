@@ -1,15 +1,13 @@
 package com.example.tmdbkotlinapp.di
 
-import androidx.paging.PagingSource
 import com.example.tmdbkotlinapp.data.repository.CastRepositoryImpl
-import com.example.tmdbkotlinapp.domain.repository.CastRepository
-import com.example.tmdbkotlinapp.domain.repository.MovieRepository
+import com.example.tmdbkotlinapp.data.repository.GenreRepositoryImpl
 import com.example.tmdbkotlinapp.data.repository.MovieRepositoryImpl
-import com.example.tmdbkotlinapp.data.repository.PopularMoviesPagingSource
-import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.domain.repository.CastRepository
+import com.example.tmdbkotlinapp.domain.repository.GenreRepository
+import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 
 @Module
 interface AppBindModule {
@@ -19,4 +17,7 @@ interface AppBindModule {
 
     @Binds
     fun bindCastRepository(castRepositoryImpl: CastRepositoryImpl): CastRepository
+
+    @Binds
+    fun bindGenreRepository(genreRepositoryImpl: GenreRepositoryImpl): GenreRepository
 }

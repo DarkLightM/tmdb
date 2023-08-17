@@ -35,10 +35,6 @@ class MovieRepositoryImpl @Inject constructor(
         else movieService.getMovieDetails(id).toDomain()
     }
 
-    override suspend fun getTotalPages(year: Int, genre: String): Int {
-        return movieService.getRandomMovie(1, year, genre).totalPages
-    }
-
     override suspend fun getSavedMovies(): Flow<List<MovieEntity>> {
         return movieDao.getSavedMovies()
     }

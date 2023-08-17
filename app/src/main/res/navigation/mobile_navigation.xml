@@ -9,7 +9,11 @@
         android:id="@+id/randomMovieFragment"
         android:name="com.example.tmdbkotlinapp.ui.random_movie.RandomMovieFragment"
         android:label="fragment_random_movie"
-        tools:layout="@layout/fragment_random_movie" />
+        tools:layout="@layout/fragment_random_movie" >
+        <action
+            android:id="@+id/action_randomMovieFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/popularMoviesFragment"
         android:name="com.example.tmdbkotlinapp.ui.popular_movies.PopularMoviesFragment"
