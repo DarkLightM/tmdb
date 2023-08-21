@@ -16,11 +16,11 @@ class SavedMoviesViewModel @Inject constructor(private val getSavedMoviesUseCase
     }
 
     private suspend fun getSavedMovieList() {
-        getSavedMoviesUseCase().collect{
-            sendEvent(SavedEvent.ShowSavedMovies(it))
-        }
-        updateState {
-            SavedUiState.Content
+        getSavedMoviesUseCase().collect{movie ->
+            sendEvent(SavedEvent.ShowSavedMovies(movie))
+            updateState {
+                SavedUiState.Content(movie)
+            }
         }
 
     }

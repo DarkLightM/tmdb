@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.R
@@ -43,7 +45,7 @@ class SavedMoviesFragment : BaseFragment<SavedUiState, SavedEvent>(R.layout.frag
     override fun renderState(state: SavedUiState) {
         when (state) {
             is SavedUiState.Loading -> showLoading()
-            is SavedUiState.Content -> showContent()
+            is SavedUiState.Content -> showSavedMovies(state.savedMovies)
         }
     }
 
@@ -60,16 +62,14 @@ class SavedMoviesFragment : BaseFragment<SavedUiState, SavedEvent>(R.layout.frag
         val savedMoviesAdapter = SavedMoviesAdapter()
         savedMoviesAdapter.submitList(movies)
         savedMoviesRecycler.adapter = savedMoviesAdapter
+
+        savedMoviesRecycler.isVisible = true
+        binding.progressBar.isInvisible = true
     }
 
     private fun showLoading() {
-       /* binding.progressBar.isVisible = true
-        binding.savedMoviesRecycler.isInvisible = true*/
-    }
-
-    private fun showContent() {
-       /* binding.progressBar.isInvisible = true
-        binding.savedMoviesRecycler.isVisible = true*/
+         binding.progressBar.isVisible = true
+         binding.savedMoviesRecycler.isInvisible = true
     }
 
 }

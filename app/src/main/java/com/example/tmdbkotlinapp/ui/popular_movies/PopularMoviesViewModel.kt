@@ -20,7 +20,7 @@ class PopularMoviesViewModel @Inject constructor(private val movieRepository: Mo
         movieRepository.getPopularMovieList().cachedIn(viewModelScope).collect {
             val pagingData = it
             updateState {
-                PopularUiState.Content
+                PopularUiState.Content(pagingData)
             }
             sendEvent(PopularEvent.ShowMovie(pagingData))
         }

@@ -22,8 +22,6 @@ class PopularMoviesFragment : BaseFragment<PopularUiState, PopularEvent>(R.layou
 
     override val viewModel by activityViewModels<PopularMoviesViewModel> { viewModelFactory }
 
-    //private val popularMoviesViewModel by viewModels<PopularMoviesViewModel> { viewModelFactory }
-
     private var _binding: FragmentPopularMoviesBinding? = null
 
     private val binding get() = requireNotNull(_binding)
@@ -49,7 +47,7 @@ class PopularMoviesFragment : BaseFragment<PopularUiState, PopularEvent>(R.layou
     override fun renderState(state: PopularUiState) {
         when (state) {
             is PopularUiState.Loading -> {}
-            is PopularUiState.Content -> {}
+            is PopularUiState.Content -> showMovies(state.pagingData)
         }
     }
 
