@@ -8,6 +8,7 @@
     tools:context=".ui.random_movie.RandomMovieFragment">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/editYearCardView"
         android:layout_width="75dp"
         android:layout_height="50dp"
         app:cardBackgroundColor="@color/dark_blue"

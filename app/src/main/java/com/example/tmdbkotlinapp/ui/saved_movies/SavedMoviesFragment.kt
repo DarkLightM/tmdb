@@ -5,18 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.FragmentSavedMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.base.BaseFragment
 import javax.inject.Inject
 
-class SavedMoviesFragment : Fragment() {
+class SavedMoviesFragment : BaseFragment<SavedUiState, SavedEvent>(R.layout.fragment_saved_movies) {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val savedMoviesViewModel by viewModels<SavedMoviesViewModel> { viewModelFactory }
+    override val viewModel by activityViewModels<SavedMoviesViewModel> { viewModelFactory }
 
     private var _binding: FragmentSavedMoviesBinding? = null
 
@@ -36,13 +38,38 @@ class SavedMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
 
-        savedMoviesViewModel.movieList.observe(viewLifecycleOwner){
-            val savedMoviesRecycler = binding.savedMoviesRecycler
-            val savedMoviesAdapter = SavedMoviesAdapter()
-            savedMoviesAdapter.submitList(it)
-            savedMoviesRecycler.adapter = savedMoviesAdapter
+    override fun renderState(state: SavedUiState) {
+        when (state) {
+            is SavedUiState.Loading -> showLoading()
+            is SavedUiState.Content -> showContent()
         }
+    }
+
+    override fun reactToSideEvent(event: SavedEvent) {
+        super.reactToSideEvent(event)
+
+        when (event) {
+            is SavedEvent.ShowSavedMovies -> showSavedMovies(event.movies)
+        }
+    }
+
+    private fun showSavedMovies(movies: List<Movie>) {
+        val savedMoviesRecycler = binding.savedMoviesRecycler
+        val savedMoviesAdapter = SavedMoviesAdapter()
+        savedMoviesAdapter.submitList(movies)
+        savedMoviesRecycler.adapter = savedMoviesAdapter
+    }
+
+    private fun showLoading() {
+       /* binding.progressBar.isVisible = true
+        binding.savedMoviesRecycler.isInvisible = true*/
+    }
+
+    private fun showContent() {
+       /* binding.progressBar.isInvisible = true
+        binding.savedMoviesRecycler.isVisible = true*/
     }
 
 }
