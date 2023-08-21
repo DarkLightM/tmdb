@@ -12,4 +12,5 @@
     <string name="movie_rating_format">Рейтинг: %s</string>
     <string name="cast_header">Актеры</string>
     <string name="genre_header">Жанр</string>
+    <string name="saved_movies_header">Сохраненные фильмы</string>
 </resources>

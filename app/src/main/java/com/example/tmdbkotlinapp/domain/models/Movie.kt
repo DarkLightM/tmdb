@@ -9,4 +9,5 @@ data class Movie(
     val rating: Float,
     val popularity: Float,
     val posterPath: String,
+    val cast: List<Actor>?,
 )

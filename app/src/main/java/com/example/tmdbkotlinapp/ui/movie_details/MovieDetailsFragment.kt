@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import coil.load
 import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Actor
@@ -45,8 +46,11 @@ class MovieDetailsFragment : Fragment() {
 
         val movieId = this.arguments?.getInt("movieId")
         movieId?.let {
-            movieDetailsViewModel.loadMovieDetails(it)
+            val source = this.arguments?.getSerializable("source", DataSource::class.java)
+            movieDetailsViewModel.loadMovieDetailsFromServer(it, requireNotNull(source))
         }
+
+        setButtons()
 
         movieDetailsViewModel.movie.observe(viewLifecycleOwner) { movie ->
             setStatic(movie)
@@ -64,11 +68,6 @@ class MovieDetailsFragment : Fragment() {
         binding.movieRating.text = movie.rating.toString()
         binding.movieReleaseDate.text = movie.releaseDate
         binding.movieDescription.text = movie.overview
-
-        binding.backArrow.setOnClickListener{
-            val navController = it.findNavController()
-            navController.navigateUp()
-        }
     }
 
     private fun setCastRecycler(cast: List<Actor>) {
@@ -83,5 +82,16 @@ class MovieDetailsFragment : Fragment() {
         val adapter = GenreCardAdapter()
         adapter.submitList(genres)
         genreRecycler.adapter = adapter
+    }
+
+    private fun setButtons() {
+        binding.backArrow.setOnClickListener {
+            val navController = it.findNavController()
+            navController.navigateUp()
+        }
+
+        binding.likeButton.setOnClickListener {
+            movieDetailsViewModel.saveMovieInDb()
+        }
     }
 }
