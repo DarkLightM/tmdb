@@ -13,4 +13,8 @@
     <string name="cast_header">Актеры</string>
     <string name="genre_header">Жанр</string>
     <string name="saved_movies_header">Сохраненные фильмы</string>
+    <string name="year_type_error">Введите только цифры</string>
+    <string name="year_number_error">Год должен быть от 1900 до %s</string>
+    <string name="genre_choice_header">Выберите жанр</string>
+    <string name="enter_genre">Введите жанр</string>
 </resources>

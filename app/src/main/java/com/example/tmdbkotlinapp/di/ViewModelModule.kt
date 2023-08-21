@@ -2,6 +2,7 @@ package com.example.tmdbkotlinapp.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheetViewModel
 import com.example.tmdbkotlinapp.ui.movie_details.MovieDetailsViewModel
 import com.example.tmdbkotlinapp.ui.popular_movies.PopularMoviesViewModel
 import com.example.tmdbkotlinapp.ui.random_movie.RandomMovieViewModel
@@ -35,4 +36,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SavedMoviesViewModel::class)
     abstract fun bindSavedMoviesViewModel(savedMoviesViewModel: SavedMoviesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GenreBottomSheetViewModel::class)
+    abstract fun bindGenreBottomSheetViewModel(genreBottomSheetViewModel: GenreBottomSheetViewModel): ViewModel
 }

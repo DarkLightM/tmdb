@@ -2,6 +2,7 @@ package com.example.tmdbkotlinapp.data
 
 import com.example.tmdbkotlinapp.BuildConfig
 import com.example.tmdbkotlinapp.data.remote.model.ActorListDataModel
+import com.example.tmdbkotlinapp.data.remote.model.GenreListDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieListDataModel
 import retrofit2.Response
@@ -40,4 +41,9 @@ interface MovieService {
         @Path("movie_id") id: Int,
         @Header("Authorization") token: String = TOKEN,
     ): ActorListDataModel
+
+    @GET("genre/movie/list")
+    suspend fun getGenres(
+        @Header("Authorization") token: String = TOKEN,
+    ): GenreListDataModel
 }
