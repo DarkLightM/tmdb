@@ -18,11 +18,11 @@ import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
-import com.example.tmdbkotlinapp.ui.base.Event
+import com.example.tmdbkotlinapp.ui.base.ErrorEvent
 import javax.inject.Inject
 
 class MovieDetailsFragment :
-    BaseFragment<DetailUiState, Event>(R.layout.fragment_movie_details) {
+    BaseFragment<DetailUiState, ErrorEvent>(R.layout.fragment_movie_details) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -101,7 +101,7 @@ class MovieDetailsFragment :
     }
 
     private fun showContent() {
-        with(binding){
+        with(binding) {
             movieName.isVisible = true
             movieReleaseDate.isVisible = true
             movieRating.isVisible = true
@@ -113,7 +113,7 @@ class MovieDetailsFragment :
     }
 
     private fun showLoading() {
-        with(binding){
+        with(binding) {
             movieName.isInvisible = true
             movieReleaseDate.isInvisible = true
             movieRating.isInvisible = true
