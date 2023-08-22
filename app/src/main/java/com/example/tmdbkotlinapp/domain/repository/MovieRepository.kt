@@ -2,8 +2,6 @@ package com.example.tmdbkotlinapp.domain.repository
 
 import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
-import com.example.tmdbkotlinapp.data.repository.DataSource
-import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Movie
 import kotlinx.coroutines.flow.Flow
 
@@ -13,9 +11,9 @@ interface MovieRepository {
 
     fun getPopularMovieList(): Flow<PagingData<Movie>>
 
-    suspend fun getMovieDetails(id: Int, source: DataSource): Movie
+    suspend fun getMovieDetails(id: Int, remoteId: Int): Movie
 
     suspend fun getSavedMovies(): Flow<List<MovieEntity>>
 
-    suspend fun saveMovieInDb(movie: Movie, actors: List<Actor>)
+    suspend fun saveMovieInDb(movie: Movie)
 }

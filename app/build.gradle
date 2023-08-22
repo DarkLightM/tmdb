@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.tmdbkotlinapp"
-        minSdk 33
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -23,6 +23,12 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
 

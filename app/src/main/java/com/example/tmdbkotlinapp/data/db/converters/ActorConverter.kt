@@ -14,8 +14,12 @@ class ActorConverter {
 
     @TypeConverter
     fun toActorList(actorString: String): List<Actor> {
-        val gson = Gson()
-        val listType = object : TypeToken<List<Actor>>() {}.type
-        return gson.fromJson(actorString, listType)
+        return try {
+            val gson = Gson()
+            val listType = object : TypeToken<List<Actor>>() {}.type
+            gson.fromJson(actorString, listType)
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 }

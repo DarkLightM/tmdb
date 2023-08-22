@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.data.MovieService
 import com.example.tmdbkotlinapp.data.db.dao.MovieDao
 import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
-import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -30,26 +29,39 @@ class MovieRepositoryImpl @Inject constructor(
         return pager.flow
     }
 
-    override suspend fun getMovieDetails(id: Int, source: DataSource): Movie {
-        return if (source == DataSource.LOCAL) requireNotNull(movieDao.getMovieById(id)?.toDomain())
-        else movieService.getMovieDetails(id).toDomain()
+    override suspend fun getMovieDetails(id: Int, remoteId: Int): Movie {
+        return if (id >= 0) {
+            val savedMovie = movieDao.getMovieById(id)
+            savedMovie?.toDomain() ?: getMovieFromRemote(remoteId)
+        } else {
+            getMovieFromRemote(remoteId)
+        }
+
     }
 
     override suspend fun getSavedMovies(): Flow<List<MovieEntity>> {
         return movieDao.getSavedMovies()
     }
 
-    override suspend fun saveMovieInDb(movie: Movie, actors: List<Actor>) {
+    override suspend fun saveMovieInDb(movie: Movie) {
         val movieEntity = MovieEntity(
-            id = movie.movieId,
+            id = 0,
+            remoteId = movie.movieRemoteId,
             title = movie.originalTitle ?: "",
             overview = movie.overview,
             releaseDate = movie.releaseDate,
             rating = movie.rating,
             posterPath = movie.posterPath,
             genre = movie.genreList ?: emptyList(),
-            actors = actors
+            actors = movie.cast ?: emptyList()
         )
+        movieDao.deleteMovie(movie.movieRemoteId)
         movieDao.insertMovie(movieEntity)
+    }
+
+    private suspend fun getMovieFromRemote(remoteId: Int): Movie {
+        val movie = movieService.getMovieDetails(remoteId).toDomain()
+        val cast = movieService.getMovieCast(remoteId).toDomain()
+        return movie.copy(cast = cast)
     }
 }

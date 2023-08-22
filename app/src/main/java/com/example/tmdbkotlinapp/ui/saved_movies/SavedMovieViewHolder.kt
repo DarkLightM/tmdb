@@ -12,7 +12,7 @@ class SavedMovieViewHolder(private val binding: SavedMoviesCardBinding) :
             binding.moviePoster.load(movie.posterPath)
             binding.movieName.text = movie.originalTitle
             binding.movieRating.text = movie.rating.toString()
-            binding.movieMainGenre.text = movie.genreList?.get(0)?.name
+            binding.movieMainGenre.text = movie.genreList?.firstOrNull()?.name ?: ""
             binding.movieReleaseDate.text = movie.releaseDate
         }
 

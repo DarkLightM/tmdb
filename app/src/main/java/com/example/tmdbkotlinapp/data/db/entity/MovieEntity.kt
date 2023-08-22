@@ -8,8 +8,9 @@ import com.example.tmdbkotlinapp.domain.models.Movie
 
 @Entity("movie_entity")
 data class MovieEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
+    val remoteId: Int,
     val title: String,
     val overview: String,
     val releaseDate: String,
@@ -21,6 +22,7 @@ data class MovieEntity(
     fun toDomain(): Movie {
         return Movie(
             movieId = this.id,
+            movieRemoteId = this.remoteId,
             originalTitle = this.title,
             genreList = this.genre,
             overview = this.overview,

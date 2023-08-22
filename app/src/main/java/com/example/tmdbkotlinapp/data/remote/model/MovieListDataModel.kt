@@ -1,8 +1,6 @@
 package com.example.tmdbkotlinapp.data.remote.model
 
-import com.example.tmdbkotlinapp.data.repository.DEFAULT_IMG_URL
 import com.example.tmdbkotlinapp.domain.models.Movie
-import com.example.tmdbkotlinapp.ui.utils.formatFloat
 import com.google.gson.annotations.SerializedName
 
 data class MovieListDataModel(
@@ -15,17 +13,7 @@ data class MovieListDataModel(
 ) {
     fun toDomain(): List<Movie> {
         return this.movieList.map {
-            Movie(
-                movieId = it.movieId,
-                originalTitle = it.originalTitle,
-                genreList = it.genreList,
-                overview = it.overview,
-                releaseDate = it.releaseDate,
-                rating = formatFloat(it.rating),
-                posterPath = DEFAULT_IMG_URL.format(it.posterPath),
-                popularity = it.popularity,
-                cast = null,
-            )
+            it.toDomain()
         }
     }
 }

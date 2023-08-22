@@ -13,9 +13,10 @@ import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
-class PopularMoviesFragment : BaseFragment<PopularUiState, PopularEvent>(R.layout.fragment_popular_movies) {
+class PopularMoviesFragment : BaseFragment<PopularUiState, Event>(R.layout.fragment_popular_movies) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -48,14 +49,6 @@ class PopularMoviesFragment : BaseFragment<PopularUiState, PopularEvent>(R.layou
         when (state) {
             is PopularUiState.Loading -> {}
             is PopularUiState.Content -> showMovies(state.pagingData)
-        }
-    }
-
-    override fun reactToSideEvent(event: PopularEvent) {
-        super.reactToSideEvent(event)
-
-        when(event){
-            is PopularEvent.ShowMovie -> showMovies(event.pagingData)
         }
     }
 

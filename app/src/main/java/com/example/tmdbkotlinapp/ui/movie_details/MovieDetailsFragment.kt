@@ -12,17 +12,17 @@ import androidx.navigation.findNavController
 import coil.load
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.R
-import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
 class MovieDetailsFragment :
-    BaseFragment<DetailUiState, DetailEvent>(R.layout.fragment_movie_details) {
+    BaseFragment<DetailUiState, Event>(R.layout.fragment_movie_details) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -48,11 +48,9 @@ class MovieDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieId = this.arguments?.getInt("movieId")
-        movieId?.let {
-            val source = this.arguments?.getSerializable("source", DataSource::class.java)
-            viewModel.loadMovieDetails(it, requireNotNull(source))
-        }
+        val movieId = this.arguments?.getInt("movieId") ?: -1
+        val movieRemoteId = this.arguments?.getInt("movieRemoteId") ?: -1
+        viewModel.loadMovieDetails(movieId, movieRemoteId)
 
         setButtons()
     }
@@ -60,18 +58,11 @@ class MovieDetailsFragment :
     override fun renderState(state: DetailUiState) {
         when (state) {
             is DetailUiState.Loading -> showLoading()
-            is DetailUiState.Content -> showContent()
-        }
-    }
-
-    override fun reactToSideEvent(event: DetailEvent) {
-        super.reactToSideEvent(event)
-
-        when (event) {
-            is DetailEvent.ShowDetails -> {
-                setStatic(event.movie)
-                setCastRecycler(event.cast)
-                event.movie.genreList?.let { setGenreRecycler(it) }
+            is DetailUiState.Content -> {
+                setStatic(state.movie)
+                setCastRecycler(state.movie.cast ?: emptyList())
+                setGenreRecycler(state.movie.genreList ?: emptyList())
+                showContent()
             }
         }
     }
@@ -104,9 +95,9 @@ class MovieDetailsFragment :
             navController.navigateUp()
         }
 
-        /*binding.likeButton.setOnClickListener {
-            movieDetailsViewModel.saveMovieInDb()
-        }*/
+        binding.likeButton.setOnClickListener {
+            viewModel.saveMovieInDb()
+        }
     }
 
     private fun showContent() {

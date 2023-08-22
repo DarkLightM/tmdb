@@ -7,7 +7,6 @@ import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.example.tmdbkotlinapp.R
-import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.PopularMovieCardBinding
 import com.example.tmdbkotlinapp.domain.models.Movie
 
@@ -26,7 +25,7 @@ class PopularMoviesAdapter :
             holder.itemView.setOnClickListener { view ->
                 val bundle = Bundle()
                 bundle.putInt("movieId", movie.movieId)
-                bundle.putSerializable("source", DataSource.REMOTE)
+                bundle.putInt("movieRemoteId", movie.movieRemoteId)
                 val navController = view.findNavController()
                 navController.navigate(
                     R.id.action_popularMoviesFragment_to_movieDetailsFragment, bundle

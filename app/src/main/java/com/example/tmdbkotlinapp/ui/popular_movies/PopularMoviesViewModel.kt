@@ -4,11 +4,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import com.example.tmdbkotlinapp.ui.base.BaseViewModel
+import com.example.tmdbkotlinapp.ui.base.Event
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PopularMoviesViewModel @Inject constructor(private val movieRepository: MovieRepository) :
-    BaseViewModel<PopularUiState, PopularEvent>(PopularUiState.Loading) {
+    BaseViewModel<PopularUiState, Event>(PopularUiState.Loading) {
 
     init {
         viewModelScope.launch {
@@ -17,12 +18,14 @@ class PopularMoviesViewModel @Inject constructor(private val movieRepository: Mo
     }
 
     private suspend fun getMovies() {
+        updateState {
+            PopularUiState.Loading
+        }
         movieRepository.getPopularMovieList().cachedIn(viewModelScope).collect {
             val pagingData = it
             updateState {
                 PopularUiState.Content(pagingData)
             }
-            sendEvent(PopularEvent.ShowMovie(pagingData))
         }
     }
 }

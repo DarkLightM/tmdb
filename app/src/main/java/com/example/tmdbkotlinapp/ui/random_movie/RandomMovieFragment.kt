@@ -8,15 +8,16 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.R
-import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentRandomMovieBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
 import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheet
 import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheetViewModel
@@ -89,7 +90,12 @@ class RandomMovieFragment :
         super.reactToSideEvent(event)
 
         when (event) {
-            is RandomEvent.GoToDetail -> goToDetail(event.movieId)
+            is RandomEvent.GoToDetail -> goToDetail(event.movie)
+            is RandomEvent.SendErrorToast -> Toast.makeText(
+                this.context,
+                event.errorText,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -111,10 +117,10 @@ class RandomMovieFragment :
         }
     }
 
-    private fun goToDetail(movieId: Int) {
+    private fun goToDetail(movie: Movie) {
         val bundle = Bundle()
-        bundle.putInt("movieId", movieId)
-        bundle.putSerializable("source", DataSource.REMOTE)
+        bundle.putInt("movieId", movie.movieId)
+        bundle.putInt("movieRemoteId", movie.movieRemoteId)
         val navController = view?.findNavController()
         navController?.navigate(
             R.id.action_randomMovieFragment_to_movieDetailsFragment, bundle

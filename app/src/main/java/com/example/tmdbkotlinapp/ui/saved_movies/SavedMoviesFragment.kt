@@ -14,9 +14,10 @@ import com.example.tmdbkotlinapp.databinding.FragmentSavedMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
-class SavedMoviesFragment : BaseFragment<SavedUiState, SavedEvent>(R.layout.fragment_saved_movies) {
+class SavedMoviesFragment : BaseFragment<SavedUiState, Event>(R.layout.fragment_saved_movies) {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -46,14 +47,6 @@ class SavedMoviesFragment : BaseFragment<SavedUiState, SavedEvent>(R.layout.frag
         when (state) {
             is SavedUiState.Loading -> showLoading()
             is SavedUiState.Content -> showSavedMovies(state.savedMovies)
-        }
-    }
-
-    override fun reactToSideEvent(event: SavedEvent) {
-        super.reactToSideEvent(event)
-
-        when (event) {
-            is SavedEvent.ShowSavedMovies -> showSavedMovies(event.movies)
         }
     }
 
