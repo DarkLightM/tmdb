@@ -1,8 +1,8 @@
 package com.example.tmdbkotlinapp.data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Upsert
 import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -15,6 +15,9 @@ interface MovieDao {
     @Query("SELECT * FROM movie_entity WHERE id = :id")
     fun getMovieById(id: Int): MovieEntity?
 
-    @Upsert
+    @Insert
     fun insertMovie(movieEntity: MovieEntity)
+
+    @Query("DELETE FROM movie_entity WHERE remoteId = :remoteId")
+    fun deleteMovie(remoteId: Int)
 }

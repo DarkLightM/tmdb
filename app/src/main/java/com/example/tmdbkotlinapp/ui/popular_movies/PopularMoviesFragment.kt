@@ -5,19 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.MainApplication
+import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.base.BaseFragment
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
-class PopularMoviesFragment : Fragment() {
+class PopularMoviesFragment : BaseFragment<PopularUiState, Event>(R.layout.fragment_popular_movies) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val popularMoviesViewModel by viewModels<PopularMoviesViewModel> { viewModelFactory }
+    override val viewModel by activityViewModels<PopularMoviesViewModel> { viewModelFactory }
 
     private var _binding: FragmentPopularMoviesBinding? = null
 
@@ -39,20 +43,18 @@ class PopularMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initView()
-        collectUiState()
     }
 
-    private fun initView() {
+    override fun renderState(state: PopularUiState) {
+        when (state) {
+            is PopularUiState.Loading -> {}
+            is PopularUiState.Content -> showMovies(state.pagingData)
+        }
+    }
+
+    private fun showMovies(pagingData: PagingData<Movie>){
         adapter = PopularMoviesAdapter()
         binding.popularMoviesRecyclerView.adapter = adapter
-    }
-
-    private fun collectUiState() {
-        popularMoviesViewModel.popularMovieList.observe(viewLifecycleOwner) { movies ->
-            adapter?.submitData(viewLifecycleOwner.lifecycle, movies)
-        }
-
+        adapter?.submitData(viewLifecycleOwner.lifecycle, pagingData)
     }
 }

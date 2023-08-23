@@ -2,6 +2,7 @@ package com.example.tmdbkotlinapp.domain.models
 
 data class Movie(
     val movieId: Int,
+    val movieRemoteId: Int,
     val originalTitle: String?,
     val genreList: List<Genre>?,
     val overview: String,

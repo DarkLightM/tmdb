@@ -5,25 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import coil.load
 import com.example.tmdbkotlinapp.MainApplication
-import com.example.tmdbkotlinapp.data.repository.DataSource
+import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.FragmentMovieDetailsBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
 import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.ui.base.BaseFragment
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
-class MovieDetailsFragment : Fragment() {
+class MovieDetailsFragment :
+    BaseFragment<DetailUiState, Event>(R.layout.fragment_movie_details) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private val movieDetailsViewModel by viewModels<MovieDetailsViewModel> { viewModelFactory }
+    override val viewModel by activityViewModels<MovieDetailsViewModel> { viewModelFactory }
 
     private var _binding: FragmentMovieDetailsBinding? = null
 
@@ -44,21 +48,22 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieId = this.arguments?.getInt("movieId")
-        movieId?.let {
-            val source = this.arguments?.getSerializable("source", DataSource::class.java)
-            movieDetailsViewModel.loadMovieDetails(it, requireNotNull(source))
-        }
+        val movieId = this.arguments?.getInt("movieId") ?: -1
+        val movieRemoteId = this.arguments?.getInt("movieRemoteId") ?: -1
+        viewModel.loadMovieDetails(movieId, movieRemoteId)
 
         setButtons()
+    }
 
-        movieDetailsViewModel.movie.observe(viewLifecycleOwner) { movie ->
-            setStatic(movie)
-            movie.genreList?.let { genreList -> setGenreRecycler(genreList) }
-        }
-
-        movieDetailsViewModel.cast.observe(viewLifecycleOwner) {
-            setCastRecycler(it)
+    override fun renderState(state: DetailUiState) {
+        when (state) {
+            is DetailUiState.Loading -> showLoading()
+            is DetailUiState.Content -> {
+                setStatic(state.movie)
+                setCastRecycler(state.movie.cast ?: emptyList())
+                setGenreRecycler(state.movie.genreList ?: emptyList())
+                showContent()
+            }
         }
     }
 
@@ -91,7 +96,31 @@ class MovieDetailsFragment : Fragment() {
         }
 
         binding.likeButton.setOnClickListener {
-            movieDetailsViewModel.saveMovieInDb()
+            viewModel.saveMovieInDb()
+        }
+    }
+
+    private fun showContent() {
+        with(binding){
+            movieName.isVisible = true
+            movieReleaseDate.isVisible = true
+            movieRating.isVisible = true
+            movieDescription.isVisible = true
+            castRecyclerView.isVisible = true
+            genreRecyclerView.isVisible = true
+            progressBar.isInvisible = true
+        }
+    }
+
+    private fun showLoading() {
+        with(binding){
+            movieName.isInvisible = true
+            movieReleaseDate.isInvisible = true
+            movieRating.isInvisible = true
+            movieDescription.isInvisible = true
+            castRecyclerView.isInvisible = true
+            genreRecyclerView.isInvisible = true
+            progressBar.isVisible = true
         }
     }
 }

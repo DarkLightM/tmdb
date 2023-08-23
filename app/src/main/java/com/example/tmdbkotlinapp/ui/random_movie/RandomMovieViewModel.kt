@@ -13,11 +13,15 @@ class RandomMovieViewModel @Inject constructor(private val getRandomMovieUseCase
             RandomUiState.Loading
         }
         viewModelScope.launch {
-            val movieId = getRandomMovieUseCase(year, genre).movieId
+            val movie = getRandomMovieUseCase(year, genre)
+            if (movie == null) {
+                sendEvent(RandomEvent.SendErrorToast())
+            } else {
+                sendEvent(RandomEvent.GoToDetail(movie))
+            }
             updateState {
                 RandomUiState.Content
             }
-            sendEvent(RandomEvent.GoToDetail(movieId))
         }
     }
 }

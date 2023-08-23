@@ -7,7 +7,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.example.tmdbkotlinapp.R
-import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.SavedMoviesCardBinding
 import com.example.tmdbkotlinapp.domain.models.Movie
 
@@ -25,7 +24,7 @@ class SavedMoviesAdapter : ListAdapter<Movie, SavedMovieViewHolder>(SavedMovieDi
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("movieId", movie.movieId)
-            bundle.putSerializable("source", DataSource.LOCAL)
+            bundle.putInt("movieRemoteId", movie.movieRemoteId)
             val navController = it.findNavController()
             navController.navigate(R.id.action_savedMoviesFragment_to_movieDetailsFragment, bundle)
         }

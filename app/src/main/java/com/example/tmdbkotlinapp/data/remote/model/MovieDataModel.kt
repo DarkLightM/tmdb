@@ -26,7 +26,8 @@ data class MovieDataModel(
 ) {
     fun toDomain(): Movie {
         return Movie(
-            movieId = this.movieId,
+            movieRemoteId = this.movieId,
+            movieId = -1,
             originalTitle = this.originalTitle,
             genreList = this.genreList,
             overview = this.overview,

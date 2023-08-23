@@ -8,21 +8,23 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.R
-import com.example.tmdbkotlinapp.data.repository.DataSource
 import com.example.tmdbkotlinapp.databinding.FragmentRandomMovieBinding
 import com.example.tmdbkotlinapp.di.ViewModelFactory
+import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
 import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheet
 import com.example.tmdbkotlinapp.ui.genres_bottom_sheet.GenreBottomSheetViewModel
 import javax.inject.Inject
 
-class RandomMovieFragment : BaseFragment<RandomUiState, RandomEvent>(R.layout.fragment_random_movie) {
+class RandomMovieFragment :
+    BaseFragment<RandomUiState, RandomEvent>(R.layout.fragment_random_movie) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -39,8 +41,7 @@ class RandomMovieFragment : BaseFragment<RandomUiState, RandomEvent>(R.layout.fr
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentRandomMovieBinding.inflate(inflater, container, false)
         return binding.root
@@ -72,8 +73,7 @@ class RandomMovieFragment : BaseFragment<RandomUiState, RandomEvent>(R.layout.fr
         binding.getRandomFilmButton.setOnClickListener {
             if (validateInput(binding.editYear.text.toString()) && binding.selectedGenre.text != null) {
                 viewModel.getRandomMovie(
-                    binding.editYear.text.toString().toInt(),
-                    binding.selectedGenre.text.toString()
+                    binding.editYear.text.toString().toInt(), binding.selectedGenre.text.toString()
                 )
             }
         }
@@ -89,31 +89,38 @@ class RandomMovieFragment : BaseFragment<RandomUiState, RandomEvent>(R.layout.fr
     override fun reactToSideEvent(event: RandomEvent) {
         super.reactToSideEvent(event)
 
-        when(event){
-            is RandomEvent.GoToDetail -> goToDetail(event.movieId)
+        when (event) {
+            is RandomEvent.GoToDetail -> goToDetail(event.movie)
+            is RandomEvent.SendErrorToast -> Toast.makeText(
+                this.context,
+                requireContext().getString(R.string.random_error_msg),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
     private fun showLoading() {
-        binding.editYear.isInvisible
-        binding.selectedGenre.isInvisible
-        binding.getRandomFilmButton.isInvisible
-        binding.editGenreCardView.isInvisible
-        binding.progressBar.isVisible
+        with(binding) {
+            editYearCardView.isInvisible = true
+            getRandomFilmButton.isInvisible = true
+            editGenreCardView.isInvisible = true
+            progressBar.isVisible = true
+        }
     }
 
-    private fun showContent(){
-        binding.editYear.isVisible
-        binding.selectedGenre.isVisible
-        binding.getRandomFilmButton.isVisible
-        binding.editGenreCardView.isVisible
-        binding.progressBar.isInvisible
+    private fun showContent() {
+        with(binding) {
+            editYearCardView.isVisible = true
+            getRandomFilmButton.isVisible = true
+            editGenreCardView.isVisible = true
+            progressBar.isInvisible = true
+        }
     }
 
-    private fun goToDetail(movieId: Int){
+    private fun goToDetail(movie: Movie) {
         val bundle = Bundle()
-        bundle.putInt("movieId", movieId)
-        bundle.putSerializable("source", DataSource.REMOTE)
+        bundle.putInt("movieId", movie.movieId)
+        bundle.putInt("movieRemoteId", movie.movieRemoteId)
         val navController = view?.findNavController()
         navController?.navigate(
             R.id.action_randomMovieFragment_to_movieDetailsFragment, bundle
@@ -130,8 +137,7 @@ class RandomMovieFragment : BaseFragment<RandomUiState, RandomEvent>(R.layout.fr
                 false
             } else if (inputValue < 1900 || inputValue > currentYear) {
                 binding.editYear.error = String.format(
-                    requireActivity().getString((R.string.year_number_error)),
-                    currentYear
+                    requireActivity().getString((R.string.year_number_error)), currentYear
                 )
                 false
             } else {
