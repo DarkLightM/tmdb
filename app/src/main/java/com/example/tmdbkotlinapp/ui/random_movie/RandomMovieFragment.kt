@@ -93,7 +93,7 @@ class RandomMovieFragment :
             is RandomEvent.GoToDetail -> goToDetail(event.movie)
             is RandomEvent.SendErrorToast -> Toast.makeText(
                 this.context,
-                event.errorText,
+                requireContext().getString(R.string.random_error_msg),
                 Toast.LENGTH_SHORT
             ).show()
         }

@@ -17,4 +17,5 @@
     <string name="year_number_error">Год должен быть от 1900 до %s</string>
     <string name="genre_choice_header">Выберите жанр</string>
     <string name="enter_genre">Введите жанр</string>
+    <string name="random_error_msg">Произошла ошибка при загрузке фильма</string>
 </resources>
