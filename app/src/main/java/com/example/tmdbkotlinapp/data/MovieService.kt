@@ -6,7 +6,6 @@ import com.example.tmdbkotlinapp.data.remote.model.GenreListDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieDataModel
 import com.example.tmdbkotlinapp.data.remote.model.MovieListDataModel
 import com.example.tmdbkotlinapp.domain.base.WorkResult
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
@@ -29,7 +28,7 @@ interface MovieService {
     suspend fun getPopular(
         @Query("page") page: Int,
         @Header("Authorization") token: String = TOKEN,
-    ): Response<MovieListDataModel>
+    ): WorkResult<MovieListDataModel>
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(

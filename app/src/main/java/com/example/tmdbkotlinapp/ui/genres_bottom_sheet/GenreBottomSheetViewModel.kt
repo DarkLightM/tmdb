@@ -19,6 +19,9 @@ class GenreBottomSheetViewModel @Inject constructor(private val genreRepository:
     private val _selectedGenre = MutableLiveData<String>()
     val selectedGenre: LiveData<String> get() = _selectedGenre
 
+    private val _error = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean> get() = _error
+
     init {
         loadGenres()
     }
@@ -26,7 +29,12 @@ class GenreBottomSheetViewModel @Inject constructor(private val genreRepository:
     private fun loadGenres() {
         viewModelScope.launch {
             val workResult = genreRepository.getGenres()
-            workResult.handle(onSuccess = { _genres.postValue(it)}, onNotSuccess = { })
+            workResult.handle(
+                onSuccess = {
+                    _genres.postValue(it)
+                    _error.postValue(false)
+                },
+                onNotSuccess = { _error.postValue(true) })
         }
     }
 

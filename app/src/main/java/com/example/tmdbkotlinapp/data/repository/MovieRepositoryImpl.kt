@@ -8,7 +8,6 @@ import com.example.tmdbkotlinapp.data.db.dao.MovieDao
 import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
 import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.base.map
-import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -65,14 +64,11 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun getMovieFromRemote(remoteId: Int): WorkResult<Movie> {
         val movieResult = movieService.getMovieDetails(remoteId)
-        val castResult = movieService.getMovieCast(remoteId)
+        val castResult = movieService.getMovieCast(remoteId).map { it.toDomain() }
 
         return movieResult.map { movieData ->
             val movie = movieData.toDomain()
-            var cast = emptyList<Actor>()
-            castResult.map { castData ->
-                cast = castData.toDomain()
-            }
+            val cast = (castResult as? WorkResult.Success)?.data
             movie.copy(cast = cast)
         }
     }
