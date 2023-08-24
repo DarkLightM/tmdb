@@ -50,6 +50,7 @@ class MovieRepositoryImpl @Inject constructor(
         val movieEntity = MovieEntity(
             id = 0,
             remoteId = movie.movieRemoteId,
+            isAdult = movie.isAdult,
             title = movie.originalTitle ?: "",
             overview = movie.overview,
             releaseDate = movie.releaseDate,
@@ -60,6 +61,14 @@ class MovieRepositoryImpl @Inject constructor(
         )
         movieDao.deleteMovie(movie.movieRemoteId)
         movieDao.insertMovie(movieEntity)
+    }
+
+    override suspend fun deleteMovieFromDb(remoteId: Int) {
+        movieDao.deleteMovie(remoteId)
+    }
+
+    override suspend fun isMovieInDb(remoteId: Int): Flow<Int> {
+        return movieDao.isMovieInDb(remoteId)
     }
 
     private suspend fun getMovieFromRemote(remoteId: Int): WorkResult<Movie> {

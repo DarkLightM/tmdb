@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -51,14 +53,13 @@ class MovieDetailsFragment :
         val movieId = this.arguments?.getInt("movieId") ?: -1
         val movieRemoteId = this.arguments?.getInt("movieRemoteId") ?: -1
         viewModel.loadMovieDetails(movieId, movieRemoteId)
-
-        setButtons()
     }
 
     override fun renderState(state: DetailUiState) {
         when (state) {
             is DetailUiState.Loading -> showLoading()
             is DetailUiState.Content -> {
+                setButtons()
                 setStatic(state.movie)
                 setCastRecycler(state.movie.cast ?: emptyList())
                 setGenreRecycler(state.movie.genreList ?: emptyList())
@@ -68,7 +69,15 @@ class MovieDetailsFragment :
     }
 
     private fun setStatic(movie: Movie) {
-        binding.movieBcgPoster.load(movie.posterPath)
+        binding.movieBcgPoster.load(movie.posterPath) {
+            placeholder(R.drawable.ic_placeholder)
+            listener(onSuccess = { _, _ ->
+                binding.movieBcgPoster.scaleType = ImageView.ScaleType.CENTER_CROP
+            })
+        }
+        if (movie.isAdult){
+            binding.isAdultIcon.isVisible = true
+        }
         binding.movieName.text = movie.originalTitle
         binding.movieRating.text = movie.rating.toString()
         binding.movieReleaseDate.text = movie.releaseDate
@@ -95,8 +104,33 @@ class MovieDetailsFragment :
             navController.navigateUp()
         }
 
-        binding.likeButton.setOnClickListener {
-            viewModel.saveMovieInDb()
+        viewModel.checkMovieInDb()
+        viewModel.isMovieInDb.observe(viewLifecycleOwner) {
+            when (it) {
+                true -> {
+                    binding.likeBcg.setCardBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.dark_blue
+                        )
+                    )
+                    binding.likeButton.setBackgroundResource(R.drawable.ic_like_tapped)
+                    binding.likeButton.setOnClickListener {
+                        viewModel.deleteMovieFromDb()
+                    }
+                }
+
+                false -> {
+                    binding.likeBcg.setCardBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(), R.color.white
+                        )
+                    )
+                    binding.likeButton.setBackgroundResource(R.drawable.ic_like_untapped)
+                    binding.likeButton.setOnClickListener {
+                        viewModel.saveMovieInDb()
+                    }
+                }
+            }
         }
     }
 
@@ -105,6 +139,9 @@ class MovieDetailsFragment :
             movieName.isVisible = true
             movieReleaseDate.isVisible = true
             movieRating.isVisible = true
+            ratingBcg.isVisible = true
+            likeBcg.isVisible = true
+            likeButton.isVisible = true
             movieDescription.isVisible = true
             castRecyclerView.isVisible = true
             genreRecyclerView.isVisible = true
@@ -117,6 +154,9 @@ class MovieDetailsFragment :
             movieName.isInvisible = true
             movieReleaseDate.isInvisible = true
             movieRating.isInvisible = true
+            ratingBcg.isInvisible = true
+            likeBcg.isInvisible = true
+            likeButton.isInvisible = true
             movieDescription.isInvisible = true
             castRecyclerView.isInvisible = true
             genreRecyclerView.isInvisible = true

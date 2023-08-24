@@ -20,4 +20,7 @@ interface MovieDao {
 
     @Query("DELETE FROM movie_entity WHERE remoteId = :remoteId")
     fun deleteMovie(remoteId: Int)
+
+    @Query("SELECT COUNT(*) FROM movie_entity WHERE remoteId = :remoteId")
+    fun isMovieInDb(remoteId: Int): Flow<Int>
 }

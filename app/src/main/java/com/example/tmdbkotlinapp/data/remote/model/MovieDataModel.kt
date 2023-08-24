@@ -9,6 +9,8 @@ import com.google.gson.annotations.SerializedName
 data class MovieDataModel(
     @SerializedName("id")
     val movieId: Int,
+    @SerializedName("adult")
+    val isAdult: Boolean,
     @SerializedName("original_title")
     val originalTitle: String,
     @SerializedName("genres")
@@ -28,6 +30,7 @@ data class MovieDataModel(
         return Movie(
             movieRemoteId = this.movieId,
             movieId = -1,
+            isAdult = this.isAdult,
             originalTitle = this.originalTitle,
             genreList = this.genreList,
             overview = this.overview,

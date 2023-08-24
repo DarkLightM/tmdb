@@ -17,4 +17,8 @@ interface MovieRepository {
     suspend fun getSavedMovies(): Flow<List<MovieEntity>>
 
     suspend fun saveMovieInDb(movie: Movie)
+
+    suspend fun deleteMovieFromDb(remoteId: Int)
+
+    suspend fun isMovieInDb(remoteId: Int): Flow<Int>
 }

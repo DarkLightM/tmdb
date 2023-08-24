@@ -1,5 +1,7 @@
 package com.example.tmdbkotlinapp.ui.movie_details
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tmdbkotlinapp.domain.base.handle
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
@@ -12,6 +14,9 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : BaseViewModel<DetailUiState, ErrorEvent>(DetailUiState.Loading) {
+
+    private val _isMovieInDb = MutableLiveData<Boolean>()
+    val isMovieInDb: LiveData<Boolean> get() = _isMovieInDb
 
     fun loadMovieDetails(id: Int, remoteId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -36,6 +41,24 @@ class MovieDetailsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             (state.value as? DetailUiState.Content)?.let {
                 movieRepository.saveMovieInDb(it.movie)
+            }
+        }
+    }
+
+    fun deleteMovieFromDb() {
+        viewModelScope.launch(Dispatchers.IO) {
+            (state.value as? DetailUiState.Content)?.let {
+                movieRepository.deleteMovieFromDb(it.movie.movieRemoteId)
+            }
+        }
+    }
+
+    fun checkMovieInDb() {
+        viewModelScope.launch(Dispatchers.IO) {
+            (state.value as? DetailUiState.Content)?.let { content ->
+                movieRepository.isMovieInDb(content.movie.movieRemoteId).collect {
+                    _isMovieInDb.postValue(it > 0)
+                }
             }
         }
     }
