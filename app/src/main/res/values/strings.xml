@@ -7,9 +7,7 @@
     <string name="popular_movie">Популярное</string>
     <string name="random_movie">Случайное</string>
     <string name="saved_movie">Сохраненное</string>
-    <string name="movie_name_format">Название: %s</string>
-    <string name="movie_release_date_format">Дата выхода: %s</string>
-    <string name="movie_rating_format">Рейтинг: %s</string>
+    <string name="movie_release_date_format"><![CDATA[<b>Дата выхода: </b>%1$s]]></string>
     <string name="cast_header">Актеры</string>
     <string name="genre_header">Жанр</string>
     <string name="saved_movies_header">Сохраненные фильмы</string>
