@@ -18,4 +18,5 @@
     <string name="genre_choice_header">Выберите жанр</string>
     <string name="enter_genre">Введите жанр</string>
     <string name="random_error_msg">Произошла ошибка при загрузке фильма</string>
+    <string name="genre_download_error">Произошла ошибка при загрузке жанров</string>
 </resources>

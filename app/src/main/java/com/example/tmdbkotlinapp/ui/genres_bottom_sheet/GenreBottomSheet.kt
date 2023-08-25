@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +52,13 @@ class GenreBottomSheet : BottomSheetDialogFragment() {
         adapter = GenreBottomSheetCardAdapter { selectedGenreName ->
             genreBottomSheetViewModel.setSelectedGenre(selectedGenreName)
             dismiss()
+        }
+
+        genreBottomSheetViewModel.error.observe(this){
+            when (it){
+                true -> binding.downloadError.isVisible = true
+                false -> binding.downloadError.isVisible = false
+            }
         }
 
         genreBottomSheetViewModel.genres.observe(this) {

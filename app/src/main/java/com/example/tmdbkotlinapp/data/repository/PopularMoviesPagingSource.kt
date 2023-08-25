@@ -3,9 +3,11 @@ package com.example.tmdbkotlinapp.data.repository
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.tmdbkotlinapp.data.MovieService
+import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.models.Movie
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.RuntimeException
 
 class PopularMoviesPagingSource(private val movieService: MovieService) :
     PagingSource<Int, Movie>() {
@@ -14,13 +16,13 @@ class PopularMoviesPagingSource(private val movieService: MovieService) :
 
         return try {
             val response = movieService.getPopular(pageIndex)
-            if (response.isSuccessful) {
-                val movies = response.body()?.toDomain()
-                val nextPageNumber = if (requireNotNull(movies).isEmpty()) null else pageIndex + 1
+            if (response is WorkResult.Success) {
+                val movies = response.data.toDomain()
+                val nextPageNumber = if (movies.isEmpty()) null else pageIndex + 1
                 val prevPageNumber = if (pageIndex > 1) pageIndex - 1 else null
                 LoadResult.Page(movies, prevPageNumber, nextPageNumber)
             } else {
-                LoadResult.Error(HttpException(response))
+                LoadResult.Error(RuntimeException("Popular movies download fail"))
             }
         } catch (exception: IOException) {
             LoadResult.Error(exception)

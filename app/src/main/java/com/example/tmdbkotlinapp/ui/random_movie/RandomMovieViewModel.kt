@@ -1,6 +1,7 @@
 package com.example.tmdbkotlinapp.ui.random_movie
 
 import androidx.lifecycle.viewModelScope
+import com.example.tmdbkotlinapp.domain.base.handle
 import com.example.tmdbkotlinapp.domain.usecase.GetRandomMovieUseCase
 import com.example.tmdbkotlinapp.ui.base.BaseViewModel
 import kotlinx.coroutines.launch
@@ -13,12 +14,10 @@ class RandomMovieViewModel @Inject constructor(private val getRandomMovieUseCase
             RandomUiState.Loading
         }
         viewModelScope.launch {
-            val movie = getRandomMovieUseCase(year, genre)
-            if (movie == null) {
-                sendEvent(RandomEvent.SendErrorToast())
-            } else {
-                sendEvent(RandomEvent.GoToDetail(movie))
-            }
+            val workResult = getRandomMovieUseCase(year, genre)
+            workResult.handle(
+                onSuccess = { sendEvent(RandomEvent.GoToDetail(it.random())) },
+                onNotSuccess = { sendEvent(RandomEvent.SendErrorToast()) })
             updateState {
                 RandomUiState.Content
             }

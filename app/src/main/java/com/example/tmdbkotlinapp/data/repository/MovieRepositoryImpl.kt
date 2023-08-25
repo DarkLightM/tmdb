@@ -6,6 +6,8 @@ import androidx.paging.PagingData
 import com.example.tmdbkotlinapp.data.MovieService
 import com.example.tmdbkotlinapp.data.db.dao.MovieDao
 import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
+import com.example.tmdbkotlinapp.domain.base.WorkResult
+import com.example.tmdbkotlinapp.domain.base.map
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -21,22 +23,23 @@ class MovieRepositoryImpl @Inject constructor(
         PopularMoviesPagingSource(movieService)
     })
 
-    override suspend fun getRandomMovieList(page: Int, year: Int, genre: String): List<Movie> {
-        return movieService.getRandomMovie(page, year, genre).toDomain()
+    override suspend fun getRandomMovieList(
+        page: Int, year: Int, genre: String
+    ): WorkResult<List<Movie>> {
+        return movieService.getRandomMovie(page, year, genre).map { it.toDomain() }
     }
 
     override fun getPopularMovieList(): Flow<PagingData<Movie>> {
         return pager.flow
     }
 
-    override suspend fun getMovieDetails(id: Int, remoteId: Int): Movie {
+    override suspend fun getMovieDetails(id: Int, remoteId: Int): WorkResult<Movie> {
         return if (id >= 0) {
             val savedMovie = movieDao.getMovieById(id)
-            savedMovie?.toDomain() ?: getMovieFromRemote(remoteId)
+            savedMovie?.toDomain()?.let { WorkResult.Success(it) } ?: getMovieFromRemote(remoteId)
         } else {
             getMovieFromRemote(remoteId)
         }
-
     }
 
     override suspend fun getSavedMovies(): Flow<List<MovieEntity>> {
@@ -59,9 +62,14 @@ class MovieRepositoryImpl @Inject constructor(
         movieDao.insertMovie(movieEntity)
     }
 
-    private suspend fun getMovieFromRemote(remoteId: Int): Movie {
-        val movie = movieService.getMovieDetails(remoteId).toDomain()
-        val cast = movieService.getMovieCast(remoteId).toDomain()
-        return movie.copy(cast = cast)
+    private suspend fun getMovieFromRemote(remoteId: Int): WorkResult<Movie> {
+        val movieResult = movieService.getMovieDetails(remoteId)
+        val castResult = movieService.getMovieCast(remoteId).map { it.toDomain() }
+
+        return movieResult.map { movieData ->
+            val movie = movieData.toDomain()
+            val cast = (castResult as? WorkResult.Success)?.data
+            movie.copy(cast = cast)
+        }
     }
 }
