@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import com.example.tmdbkotlinapp.MainApplication
 import com.example.tmdbkotlinapp.R
 import com.example.tmdbkotlinapp.databinding.FragmentPopularMoviesBinding
@@ -16,7 +18,8 @@ import com.example.tmdbkotlinapp.ui.base.BaseFragment
 import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
-class PopularMoviesFragment : BaseFragment<PopularUiState, Event>(R.layout.fragment_popular_movies) {
+class PopularMoviesFragment :
+    BaseFragment<PopularUiState, Event>(R.layout.fragment_popular_movies) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -52,9 +55,16 @@ class PopularMoviesFragment : BaseFragment<PopularUiState, Event>(R.layout.fragm
         }
     }
 
-    private fun showMovies(pagingData: PagingData<Movie>){
+    private fun showMovies(pagingData: PagingData<Movie>) {
         adapter = PopularMoviesAdapter()
-        binding.popularMoviesRecyclerView.adapter = adapter
         adapter?.submitData(viewLifecycleOwner.lifecycle, pagingData)
+
+        val popularMoviesRecyclerView = binding.popularMoviesRecyclerView
+        val layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        popularMoviesRecyclerView.layoutManager = layoutManager
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(popularMoviesRecyclerView)
+        popularMoviesRecyclerView.adapter = adapter
     }
 }

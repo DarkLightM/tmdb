@@ -83,11 +83,11 @@
 
         <ImageView
             android:id="@+id/isAdultIcon"
-            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/default_margin"
             android:src="@drawable/ic_adult"
+            android:visibility="gone"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ratingBcg" />
 
@@ -96,7 +96,8 @@
             android:layout_width="@dimen/circle_diameter"
             android:layout_height="@dimen/circle_diameter"
             android:layout_margin="@dimen/default_margin"
-            android:background="@drawable/ripple_selector"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/isAdultIcon">
@@ -106,9 +107,10 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_like_untapped" />
+                android:background="@drawable/ripple_selector_untapped" />
 
         </androidx.cardview.widget.CardView>
+
 
         <TextView
             android:id="@+id/movieDescription"
@@ -137,6 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
+            android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -160,6 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
             android:layout_marginBottom="100dp"
+            android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/small_margin"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

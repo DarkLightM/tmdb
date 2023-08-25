@@ -3,7 +3,8 @@
     android:color="@color/light_green">
     <item android:id="@android:id/mask">
         <shape android:shape="oval">
-            <solid android:color="@color/light_green" />
+            <solid android:color="@android:color/white" />
         </shape>
     </item>
+    <item android:drawable="@drawable/ic_like_untapped" />
 </ripple>

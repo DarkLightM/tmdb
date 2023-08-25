@@ -109,7 +109,7 @@ class MovieDetailsFragment :
                         requireContext(), R.color.dark_blue
                     )
                 )
-                binding.likeButton.setBackgroundResource(R.drawable.ic_like_tapped)
+                binding.likeButton.setBackgroundResource(R.drawable.ripple_selector_tapped)
                 binding.likeButton.setOnClickListener {
                     viewModel.deleteMovieFromDb()
                 }
@@ -121,7 +121,7 @@ class MovieDetailsFragment :
                         requireContext(), R.color.white
                     )
                 )
-                binding.likeButton.setBackgroundResource(R.drawable.ic_like_untapped)
+                binding.likeButton.setBackgroundResource(R.drawable.ripple_selector_untapped)
                 binding.likeButton.setOnClickListener {
                     viewModel.saveMovieInDb()
                 }
