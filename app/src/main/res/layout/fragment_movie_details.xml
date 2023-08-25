@@ -96,18 +96,18 @@
             android:layout_width="@dimen/circle_diameter"
             android:layout_height="@dimen/circle_diameter"
             android:layout_margin="@dimen/default_margin"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:foreground="@drawable/ripple_selector_oval"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="24dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/isAdultIcon">
 
-            <ImageButton
-                android:id="@+id/likeButton"
+            <ImageView
+                android:id="@+id/likeIcon"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background="@drawable/ripple_selector_untapped" />
+                android:src="@drawable/ic_like_untapped" />
 
         </androidx.cardview.widget.CardView>
 

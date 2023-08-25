@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.TMDBKotlinApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.TMDBKotlinApp" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="colorPrimary">@color/dark_blue</item>
+        <item name="colorPrimaryVariant">@color/light_blue</item>
+        <item name="colorSecondary">@color/light_green</item>
+    </style>
 </resources>
