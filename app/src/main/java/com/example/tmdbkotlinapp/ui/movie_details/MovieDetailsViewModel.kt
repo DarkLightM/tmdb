@@ -1,7 +1,5 @@
 package com.example.tmdbkotlinapp.ui.movie_details
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tmdbkotlinapp.domain.base.handle
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
@@ -15,20 +13,22 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : BaseViewModel<DetailUiState, ErrorEvent>(DetailUiState.Loading) {
 
-    private val _isMovieInDb = MutableLiveData<Boolean>()
-    val isMovieInDb: LiveData<Boolean> get() = _isMovieInDb
+    private var lastLoadedMovieId = -1
 
-    fun loadMovieDetails(id: Int, remoteId: Int) {
+    fun loadMovieDetails(remoteId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            updateState {
-                DetailUiState.Loading
+            if (remoteId != lastLoadedMovieId) {
+                updateState {
+                    DetailUiState.Loading
+                }
             }
 
-            val workResult = movieRepository.getMovieDetails(id, remoteId)
+            val workResult = movieRepository.getMovieDetails(remoteId)
 
-            workResult.handle(onSuccess = { movie ->
+            workResult.handle(onSuccess = { movieResult ->
+                lastLoadedMovieId = remoteId
                 updateState {
-                    DetailUiState.Content(movie)
+                    DetailUiState.Content(movieResult.movie, movieResult.isSaved)
                 }
             }, onNotSuccess = {
                 sendEvent(ErrorEvent.SendErrorToast("Error"))
@@ -39,26 +39,18 @@ class MovieDetailsViewModel @Inject constructor(
 
     fun saveMovieInDb() {
         viewModelScope.launch(Dispatchers.IO) {
-            (state.value as? DetailUiState.Content)?.let {
-                movieRepository.saveMovieInDb(it.movie)
+            (state.value as? DetailUiState.Content)?.let { state ->
+                movieRepository.saveMovieInDb(state.movie)
+                loadMovieDetails(state.movie.movieRemoteId)
             }
         }
     }
 
     fun deleteMovieFromDb() {
         viewModelScope.launch(Dispatchers.IO) {
-            (state.value as? DetailUiState.Content)?.let {
-                movieRepository.deleteMovieFromDb(it.movie.movieRemoteId)
-            }
-        }
-    }
-
-    fun checkMovieInDb() {
-        viewModelScope.launch(Dispatchers.IO) {
-            (state.value as? DetailUiState.Content)?.let { content ->
-                movieRepository.isMovieInDb(content.movie.movieRemoteId).collect {
-                    _isMovieInDb.postValue(it > 0)
-                }
+            (state.value as? DetailUiState.Content)?.let { state ->
+                movieRepository.deleteMovieFromDb(state.movie.movieRemoteId)
+                loadMovieDetails(state.movie.movieRemoteId)
             }
         }
     }

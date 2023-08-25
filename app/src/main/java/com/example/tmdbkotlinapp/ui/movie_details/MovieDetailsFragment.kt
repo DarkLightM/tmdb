@@ -50,16 +50,15 @@ class MovieDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movieId = this.arguments?.getInt("movieId") ?: -1
         val movieRemoteId = this.arguments?.getInt("movieRemoteId") ?: -1
-        viewModel.loadMovieDetails(movieId, movieRemoteId)
+        viewModel.loadMovieDetails(movieRemoteId)
     }
 
     override fun renderState(state: DetailUiState) {
         when (state) {
             is DetailUiState.Loading -> showLoading()
             is DetailUiState.Content -> {
-                setButtons()
+                setButtons(state.isSaved)
                 setStatic(state.movie)
                 setCastRecycler(state.movie.cast ?: emptyList())
                 setGenreRecycler(state.movie.genreList ?: emptyList())
@@ -75,7 +74,7 @@ class MovieDetailsFragment :
                 binding.movieBcgPoster.scaleType = ImageView.ScaleType.CENTER_CROP
             })
         }
-        if (movie.isAdult){
+        if (movie.isAdult) {
             binding.isAdultIcon.isVisible = true
         }
         binding.movieName.text = movie.originalTitle
@@ -98,37 +97,33 @@ class MovieDetailsFragment :
         genreRecycler.adapter = adapter
     }
 
-    private fun setButtons() {
+    private fun setButtons(isSaved: Boolean) {
         binding.backArrow.setOnClickListener {
             val navController = it.findNavController()
             navController.navigateUp()
         }
-
-        viewModel.checkMovieInDb()
-        viewModel.isMovieInDb.observe(viewLifecycleOwner) {
-            when (it) {
-                true -> {
-                    binding.likeBcg.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(), R.color.dark_blue
-                        )
+        when (isSaved) {
+            true -> {
+                binding.likeBcg.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(), R.color.dark_blue
                     )
-                    binding.likeButton.setBackgroundResource(R.drawable.ic_like_tapped)
-                    binding.likeButton.setOnClickListener {
-                        viewModel.deleteMovieFromDb()
-                    }
+                )
+                binding.likeButton.setBackgroundResource(R.drawable.ic_like_tapped)
+                binding.likeButton.setOnClickListener {
+                    viewModel.deleteMovieFromDb()
                 }
+            }
 
-                false -> {
-                    binding.likeBcg.setCardBackgroundColor(
-                        ContextCompat.getColor(
-                            requireContext(), R.color.white
-                        )
+            false -> {
+                binding.likeBcg.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(), R.color.white
                     )
-                    binding.likeButton.setBackgroundResource(R.drawable.ic_like_untapped)
-                    binding.likeButton.setOnClickListener {
-                        viewModel.saveMovieInDb()
-                    }
+                )
+                binding.likeButton.setBackgroundResource(R.drawable.ic_like_untapped)
+                binding.likeButton.setOnClickListener {
+                    viewModel.saveMovieInDb()
                 }
             }
         }

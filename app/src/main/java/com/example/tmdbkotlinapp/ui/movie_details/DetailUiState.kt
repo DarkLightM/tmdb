@@ -5,5 +5,5 @@ import com.example.tmdbkotlinapp.ui.base.UiState
 
 sealed class DetailUiState : UiState {
     object Loading : DetailUiState()
-    class Content (val movie: Movie) : DetailUiState()
+    data class Content (val movie: Movie, val isSaved: Boolean) : DetailUiState()
 }
