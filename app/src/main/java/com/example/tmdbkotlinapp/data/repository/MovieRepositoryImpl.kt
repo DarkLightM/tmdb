@@ -9,6 +9,7 @@ import com.example.tmdbkotlinapp.data.db.entity.MovieEntity
 import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.base.map
 import com.example.tmdbkotlinapp.domain.models.Movie
+import com.example.tmdbkotlinapp.domain.models.MovieResult
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -33,13 +34,12 @@ class MovieRepositoryImpl @Inject constructor(
         return pager.flow
     }
 
-    override suspend fun getMovieDetails(id: Int, remoteId: Int): WorkResult<Movie> {
-        return if (id >= 0) {
-            val savedMovie = movieDao.getMovieById(id)
-            savedMovie?.toDomain()?.let { WorkResult.Success(it) } ?: getMovieFromRemote(remoteId)
-        } else {
-            getMovieFromRemote(remoteId)
+    override suspend fun getMovieDetails(remoteId: Int): WorkResult<MovieResult> {
+        val savedMovie = movieDao.getMovieByRemoteId(remoteId)
+        return savedMovie?.toDomain()?.let {
+            WorkResult.Success(MovieResult(true, it))
         }
+            ?: getMovieFromRemote(remoteId)
     }
 
     override suspend fun getSavedMovies(): Flow<List<MovieEntity>> {
@@ -50,6 +50,7 @@ class MovieRepositoryImpl @Inject constructor(
         val movieEntity = MovieEntity(
             id = 0,
             remoteId = movie.movieRemoteId,
+            isAdult = movie.isAdult,
             title = movie.originalTitle ?: "",
             overview = movie.overview,
             releaseDate = movie.releaseDate,
@@ -62,14 +63,22 @@ class MovieRepositoryImpl @Inject constructor(
         movieDao.insertMovie(movieEntity)
     }
 
-    private suspend fun getMovieFromRemote(remoteId: Int): WorkResult<Movie> {
+    override suspend fun deleteMovieFromDb(remoteId: Int) {
+        movieDao.deleteMovie(remoteId)
+    }
+
+    override suspend fun isMovieInDb(remoteId: Int): Flow<Int> {
+        return movieDao.isMovieInDb(remoteId)
+    }
+
+    private suspend fun getMovieFromRemote(remoteId: Int): WorkResult<MovieResult> {
         val movieResult = movieService.getMovieDetails(remoteId)
         val castResult = movieService.getMovieCast(remoteId).map { it.toDomain() }
 
         return movieResult.map { movieData ->
             val movie = movieData.toDomain()
             val cast = (castResult as? WorkResult.Success)?.data
-            movie.copy(cast = cast)
+            MovieResult(false, movie.copy(cast = cast))
         }
     }
 }

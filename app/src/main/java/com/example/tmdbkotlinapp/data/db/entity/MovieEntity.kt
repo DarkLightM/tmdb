@@ -11,6 +11,7 @@ data class MovieEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val remoteId: Int,
+    val isAdult: Boolean,
     val title: String,
     val overview: String,
     val releaseDate: String,
@@ -23,6 +24,7 @@ data class MovieEntity(
         return Movie(
             movieId = this.id,
             movieRemoteId = this.remoteId,
+            isAdult = this.isAdult,
             originalTitle = this.title,
             genreList = this.genre,
             overview = this.overview,

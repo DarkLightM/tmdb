@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
     android:layout_marginHorizontal="40dp"
+    android:background="@color/transparent"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -13,35 +13,57 @@
         android:layout_height="@dimen/popular_card_height"
         app:cardCornerRadius="50dp">
 
-        <ImageView
-            android:id="@+id/moviePoster"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/moviePoster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="center" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/ratingBcg"
+                android:layout_width="@dimen/circle_diameter"
+                android:layout_height="@dimen/circle_diameter"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="@dimen/default_margin"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="24dp">
+
+                <TextView
+                    android:id="@+id/movieRating"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textAppearance="@style/header_style"
+                    android:textColor="@color/dark_blue"
+                    android:textSize="20sp"
+                    tools:text="5.0" />
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/movieName"
-        android:layout_marginTop="@dimen/default_margin"
-        android:layout_width="300dp"
-        android:maxLines="1"
-        android:ellipsize="end"
+        android:layout_width="@dimen/popular_card_width"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_margin"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAlignment="center"
         android:textAppearance="@style/description_style"
         tools:text="Название" />
 
     <TextView
+        android:textAlignment="center"
         android:id="@+id/movieReleaseDate"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/popular_card_width"
         android:layout_height="wrap_content"
         android:textAppearance="@style/description_style"
         tools:text="Год выхода" />
-
-    <TextView
-        android:id="@+id/movieRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/description_style"
-        tools:text="Рейтинг 5.0" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -13,17 +13,22 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository
 ) : BaseViewModel<DetailUiState, ErrorEvent>(DetailUiState.Loading) {
 
-    fun loadMovieDetails(id: Int, remoteId: Int) {
+    private var lastLoadedMovieId = -1
+
+    fun loadMovieDetails(remoteId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            updateState {
-                DetailUiState.Loading
+            if (remoteId != lastLoadedMovieId) {
+                updateState {
+                    DetailUiState.Loading
+                }
             }
 
-            val workResult = movieRepository.getMovieDetails(id, remoteId)
+            val workResult = movieRepository.getMovieDetails(remoteId)
 
-            workResult.handle(onSuccess = { movie ->
+            workResult.handle(onSuccess = { movieResult ->
+                lastLoadedMovieId = remoteId
                 updateState {
-                    DetailUiState.Content(movie)
+                    DetailUiState.Content(movieResult.movie, movieResult.isSaved)
                 }
             }, onNotSuccess = {
                 sendEvent(ErrorEvent.SendErrorToast("Error"))
@@ -34,8 +39,18 @@ class MovieDetailsViewModel @Inject constructor(
 
     fun saveMovieInDb() {
         viewModelScope.launch(Dispatchers.IO) {
-            (state.value as? DetailUiState.Content)?.let {
-                movieRepository.saveMovieInDb(it.movie)
+            (state.value as? DetailUiState.Content)?.let { state ->
+                movieRepository.saveMovieInDb(state.movie)
+                loadMovieDetails(state.movie.movieRemoteId)
+            }
+        }
+    }
+
+    fun deleteMovieFromDb() {
+        viewModelScope.launch(Dispatchers.IO) {
+            (state.value as? DetailUiState.Content)?.let { state ->
+                movieRepository.deleteMovieFromDb(state.movie.movieRemoteId)
+                loadMovieDetails(state.movie.movieRemoteId)
             }
         }
     }
