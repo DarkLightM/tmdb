@@ -50,8 +50,11 @@ class PopularMoviesFragment :
 
     override fun renderState(state: PopularUiState) {
         when (state) {
-            is PopularUiState.Loading -> {}
-            is PopularUiState.Content -> showMovies(state.pagingData)
+            is PopularUiState.Loading -> changeVisibility(View.GONE)
+            is PopularUiState.Content -> {
+                showMovies(state.pagingData)
+                changeVisibility(View.VISIBLE)
+            }
         }
     }
 
@@ -66,5 +69,11 @@ class PopularMoviesFragment :
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(popularMoviesRecyclerView)
         popularMoviesRecyclerView.adapter = adapter
+    }
+
+    private fun changeVisibility(visibility: Int) {
+        binding.popularMoviesRecyclerView.visibility = visibility
+        binding.progressBar.visibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+
     }
 }

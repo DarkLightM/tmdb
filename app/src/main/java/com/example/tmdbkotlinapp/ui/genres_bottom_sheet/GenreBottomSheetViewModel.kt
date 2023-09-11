@@ -26,7 +26,7 @@ class GenreBottomSheetViewModel @Inject constructor(private val genreRepository:
         loadGenres()
     }
 
-    private fun loadGenres() {
+    fun loadGenres() {
         viewModelScope.launch {
             val workResult = genreRepository.getGenres()
             workResult.handle(

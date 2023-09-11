@@ -55,15 +55,15 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textAlignment="center"
-        android:textAppearance="@style/description_style"
+        android:textAppearance="@style/header_style"
         tools:text="Название" />
 
     <TextView
-        android:textAlignment="center"
         android:id="@+id/movieReleaseDate"
         android:layout_width="@dimen/popular_card_width"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/description_style"
+        android:textAlignment="center"
+        android:textAppearance="@style/header_style"
         tools:text="Год выхода" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

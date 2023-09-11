@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/gradient_background"
         tools:context=".ui.movie_details.MovieDetailsFragment">
 
@@ -38,26 +39,41 @@
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/movieName"
-            android:layout_width="300dp"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/movieNameCard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:textAppearance="@style/header_style"
+            app:cardBackgroundColor="@color/dark_blue"
+            app:cardCornerRadius="15dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/movieBcgPoster"
-            tools:text="Название фильма" />
+            app:layout_constraintTop_toBottomOf="@id/movieBcgPoster">
 
-        <TextView
-            android:id="@+id/movieReleaseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/description_style"
-            app:layout_constraintLeft_toLeftOf="@id/movieName"
-            app:layout_constraintTop_toBottomOf="@id/movieName"
-            tools:text="Дата выхода" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/small_margin">
+
+                <TextView
+                    android:id="@+id/movieName"
+                    android:maxLines="2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/header_style"
+                    tools:text="Название фильма" />
+
+                <TextView
+                    android:id="@+id/movieReleaseDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/description_style"
+                    tools:text="Дата выхода" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/ratingBcg"
@@ -112,17 +128,27 @@
         </androidx.cardview.widget.CardView>
 
 
-        <TextView
-            android:id="@+id/movieDescription"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/movieDescriptionBcg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="@dimen/default_margin"
-            android:textAppearance="@style/description_style"
+            app:cardBackgroundColor="@color/dark_blue"
+            app:cardCornerRadius="15dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/movieReleaseDate"
-            tools:text="Após cumprir pena por um crime violento, Ruth volta ao convívio na sociedade, que se recusa a perdoar seu passado. Discriminada no lugar que já chamou de lar, sua única esperança é encontrar a irmã, que ela havia sido forçada a deixar para trás." />
+            app:layout_constraintTop_toBottomOf="@id/movieNameCard">
+
+            <TextView
+                android:id="@+id/movieDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/small_margin"
+                android:textAppearance="@style/description_style"
+                tools:text="Após cumprir pena por um crime violento, Ruth volta ao convívio na sociedade, que se recusa a perdoar seu passado. Discriminada no lugar que já chamou de lar, sua única esperança é encontrar a irmã, que ela havia sido forçada a deixar para trás." />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/castHeader"
@@ -131,8 +157,8 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="@string/cast_header"
             android:textAppearance="@style/header_style"
-            app:layout_constraintLeft_toLeftOf="@id/movieDescription"
-            app:layout_constraintTop_toBottomOf="@id/movieDescription" />
+            app:layout_constraintLeft_toLeftOf="@id/movieDescriptionBcg"
+            app:layout_constraintTop_toBottomOf="@id/movieDescriptionBcg" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/castRecyclerView"
@@ -179,6 +205,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/error_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="150dp"
+            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -20,11 +19,11 @@ import com.example.tmdbkotlinapp.domain.models.Actor
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.models.Movie
 import com.example.tmdbkotlinapp.ui.base.BaseFragment
-import com.example.tmdbkotlinapp.ui.base.ErrorEvent
+import com.example.tmdbkotlinapp.ui.base.Event
 import javax.inject.Inject
 
 class MovieDetailsFragment :
-    BaseFragment<DetailUiState, ErrorEvent>(R.layout.fragment_movie_details) {
+    BaseFragment<DetailUiState, Event>(R.layout.fragment_movie_details) {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -56,14 +55,16 @@ class MovieDetailsFragment :
 
     override fun renderState(state: DetailUiState) {
         when (state) {
-            is DetailUiState.Loading -> showLoading()
+            is DetailUiState.Loading -> changeVisibility(View.INVISIBLE)
             is DetailUiState.Content -> {
                 setButtons(state.isSaved)
                 setStatic(state.movie)
                 setCastRecycler(state.movie.cast ?: emptyList())
                 setGenreRecycler(state.movie.genreList ?: emptyList())
-                showContent()
+                changeVisibility(View.VISIBLE)
             }
+
+            is DetailUiState.Error -> showError()
         }
     }
 
@@ -129,33 +130,39 @@ class MovieDetailsFragment :
         }
     }
 
-    private fun showContent() {
+    private fun changeVisibility(visibility: Int) {
         with(binding) {
-            movieName.isVisible = true
-            movieReleaseDate.isVisible = true
-            movieRating.isVisible = true
-            ratingBcg.isVisible = true
-            likeBcg.isVisible = true
-            likeIcon.isVisible = true
-            movieDescription.isVisible = true
-            castRecyclerView.isVisible = true
-            genreRecyclerView.isVisible = true
-            progressBar.isInvisible = true
+            movieName.visibility = visibility
+            movieReleaseDate.visibility = visibility
+            movieRating.visibility = visibility
+            ratingBcg.visibility = visibility
+            likeBcg.visibility = visibility
+            likeIcon.visibility = visibility
+            movieDescription.visibility = visibility
+            castRecyclerView.visibility = visibility
+            genreRecyclerView.visibility = visibility
+            castHeader.visibility = visibility
+            genreHeader.visibility = visibility
+            movieBcgPoster.visibility = visibility
+            movieNameCard.visibility = visibility
+            movieDescriptionBcg.visibility = visibility
+
+            if (visibility == View.VISIBLE) {
+                progressBar.visibility = View.INVISIBLE
+            } else {
+                progressBar.visibility = View.VISIBLE
+            }
         }
     }
 
-    private fun showLoading() {
-        with(binding) {
-            movieName.isInvisible = true
-            movieReleaseDate.isInvisible = true
-            movieRating.isInvisible = true
-            ratingBcg.isInvisible = true
-            likeBcg.isInvisible = true
-            likeIcon.isInvisible = true
-            movieDescription.isInvisible = true
-            castRecyclerView.isInvisible = true
-            genreRecyclerView.isInvisible = true
-            progressBar.isVisible = true
+    private fun showError() {
+        changeVisibility(View.INVISIBLE)
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.errorLayout.root.visibility = View.VISIBLE
+
+        binding.errorLayout.retryButton.setOnClickListener {
+            viewModel.loadMovieDetails(this.arguments?.getInt("movieRemoteId") ?: -1)
+            binding.errorLayout.root.visibility = View.INVISIBLE
         }
     }
 }
