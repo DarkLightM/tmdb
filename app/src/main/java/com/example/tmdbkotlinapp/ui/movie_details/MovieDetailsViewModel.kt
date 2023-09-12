@@ -1,7 +1,10 @@
 package com.example.tmdbkotlinapp.ui.movie_details
 
 import androidx.lifecycle.viewModelScope
+import com.example.tmdbkotlinapp.data.remote.utils.NetworkException
+import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.base.handle
+import com.example.tmdbkotlinapp.domain.models.MovieResult
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import com.example.tmdbkotlinapp.ui.base.BaseViewModel
 import com.example.tmdbkotlinapp.ui.base.Event
@@ -31,11 +34,30 @@ class MovieDetailsViewModel @Inject constructor(
                     DetailUiState.Content(movieResult.movie, movieResult.isSaved)
                 }
             }, onNotSuccess = {
+                handleErrorResult(it)
+            })
+
+        }
+    }
+
+    private fun handleErrorResult(workResult: WorkResult<MovieResult>) {
+        when (workResult) {
+            is WorkResult.Fail -> {
+                if (workResult.exception is NetworkException) {
+                    updateState {
+                        DetailUiState.NetworkError
+                    }
+                } else {
+                    updateState {
+                        DetailUiState.Error
+                    }
+                }
+            }
+            else -> {
                 updateState {
                     DetailUiState.Error
                 }
-            })
-
+            }
         }
     }
 

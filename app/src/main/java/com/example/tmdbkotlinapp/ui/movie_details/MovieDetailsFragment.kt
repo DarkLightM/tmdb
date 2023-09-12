@@ -63,7 +63,7 @@ class MovieDetailsFragment :
                 setGenreRecycler(state.movie.genreList ?: emptyList())
                 changeVisibility(View.VISIBLE)
             }
-
+            is DetailUiState.NetworkError -> showNetworkError()
             is DetailUiState.Error -> showError()
         }
     }
@@ -155,7 +155,7 @@ class MovieDetailsFragment :
         }
     }
 
-    private fun showError() {
+    private fun showNetworkError() {
         changeVisibility(View.INVISIBLE)
         binding.progressBar.visibility = View.INVISIBLE
         binding.errorLayout.root.visibility = View.VISIBLE
@@ -164,5 +164,14 @@ class MovieDetailsFragment :
             viewModel.loadMovieDetails(this.arguments?.getInt("movieRemoteId") ?: -1)
             binding.errorLayout.root.visibility = View.INVISIBLE
         }
+    }
+
+    private fun showError(){
+        changeVisibility(View.INVISIBLE)
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.errorLayout.root.visibility = View.VISIBLE
+
+        binding.errorLayout.retryButton.visibility = View.INVISIBLE
+        binding.errorLayout.errorText.text = getString(R.string.error_text)
     }
 }

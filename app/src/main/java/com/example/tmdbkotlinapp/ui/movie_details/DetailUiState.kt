@@ -7,5 +7,7 @@ sealed class DetailUiState : UiState {
     object Loading : DetailUiState()
     data class Content (val movie: Movie, val isSaved: Boolean) : DetailUiState()
 
+    object NetworkError: DetailUiState()
+
     object Error: DetailUiState()
 }

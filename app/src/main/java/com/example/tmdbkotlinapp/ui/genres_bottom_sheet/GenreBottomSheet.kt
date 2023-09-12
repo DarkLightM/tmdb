@@ -41,7 +41,7 @@ class GenreBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        genreBottomSheetViewModel.error.observe(this) {
+        genreBottomSheetViewModel.networkError.observe(this) {
             when (it) {
                 true ->  {
                     binding.errorLayout.root.isVisible = true
