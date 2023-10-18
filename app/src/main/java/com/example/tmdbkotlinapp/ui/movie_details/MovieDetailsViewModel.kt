@@ -1,17 +1,20 @@
 package com.example.tmdbkotlinapp.ui.movie_details
 
 import androidx.lifecycle.viewModelScope
+import com.example.tmdbkotlinapp.data.remote.utils.NetworkException
+import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.base.handle
+import com.example.tmdbkotlinapp.domain.models.MovieResult
 import com.example.tmdbkotlinapp.domain.repository.MovieRepository
 import com.example.tmdbkotlinapp.ui.base.BaseViewModel
-import com.example.tmdbkotlinapp.ui.base.ErrorEvent
+import com.example.tmdbkotlinapp.ui.base.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MovieDetailsViewModel @Inject constructor(
     private val movieRepository: MovieRepository
-) : BaseViewModel<DetailUiState, ErrorEvent>(DetailUiState.Loading) {
+) : BaseViewModel<DetailUiState, Event>(DetailUiState.Loading) {
 
     private var lastLoadedMovieId = -1
 
@@ -31,9 +34,30 @@ class MovieDetailsViewModel @Inject constructor(
                     DetailUiState.Content(movieResult.movie, movieResult.isSaved)
                 }
             }, onNotSuccess = {
-                sendEvent(ErrorEvent.SendErrorToast("Error"))
+                handleErrorResult(it)
             })
 
+        }
+    }
+
+    private fun handleErrorResult(workResult: WorkResult<MovieResult>) {
+        when (workResult) {
+            is WorkResult.Fail -> {
+                if (workResult.exception is NetworkException) {
+                    updateState {
+                        DetailUiState.NetworkError
+                    }
+                } else {
+                    updateState {
+                        DetailUiState.Error
+                    }
+                }
+            }
+            else -> {
+                updateState {
+                    DetailUiState.Error
+                }
+            }
         }
     }
 

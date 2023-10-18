@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
@@ -40,13 +41,18 @@ class GenreBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        genreBottomSheetViewModel.error.observe(this) {
+        genreBottomSheetViewModel.networkError.observe(this) {
             when (it) {
-                true -> binding.downloadError.isVisible = true
-                false -> binding.downloadError.isVisible = false
+                true ->  {
+                    binding.errorLayout.root.isVisible = true
+                    binding.errorLayout.retryButton.setOnClickListener{
+                        genreBottomSheetViewModel.loadGenres()
+                        binding.errorLayout.root.isGone = true
+                    }
+                }
+                false -> binding.errorLayout.root.isGone = true
             }
         }
-
         genreBottomSheetViewModel.genres.observe(this) { genres ->
             for (genre in genres) {
                 val chip = createChip(genre.name)

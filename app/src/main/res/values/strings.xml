@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TMDB Kotlin App</string>
+    <string name="app_name">Movie App</string>
     <string name="popular_films">Популярные фильмы</string>
     <string name="get_random_movie">Получить фильм</string>
     <string name="genre">Жанр</string>
@@ -17,4 +17,7 @@
     <string name="enter_genre">Введите жанр</string>
     <string name="random_error_msg">Произошла ошибка при загрузке фильма</string>
     <string name="genre_download_error">Произошла ошибка при загрузке жанров</string>
+    <string name="download_error_text">Ошибка загрузки, проверьте подключение к интернету</string>
+    <string name="retry_text">Повторить</string>
+    <string name="error_text">Произошла непредвиденная ошибка, перезапустите приложение</string>
 </resources>

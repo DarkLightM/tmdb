@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.tmdbkotlinapp.data.remote.utils.NetworkException
+import com.example.tmdbkotlinapp.domain.base.WorkResult
 import com.example.tmdbkotlinapp.domain.base.handle
 import com.example.tmdbkotlinapp.domain.models.Genre
 import com.example.tmdbkotlinapp.domain.repository.GenreRepository
@@ -19,26 +21,37 @@ class GenreBottomSheetViewModel @Inject constructor(private val genreRepository:
     private val _selectedGenre = MutableLiveData<String>()
     val selectedGenre: LiveData<String> get() = _selectedGenre
 
-    private val _error = MutableLiveData<Boolean>()
-    val error: LiveData<Boolean> get() = _error
+    private val _networkError = MutableLiveData<Boolean>()
+    val networkError: LiveData<Boolean> get() = _networkError
 
     init {
         loadGenres()
     }
 
-    private fun loadGenres() {
+    fun loadGenres() {
         viewModelScope.launch {
             val workResult = genreRepository.getGenres()
             workResult.handle(
                 onSuccess = {
                     _genres.postValue(it)
-                    _error.postValue(false)
+                    _networkError.postValue(false)
                 },
-                onNotSuccess = { _error.postValue(true) })
+                onNotSuccess = { handleErrorResult(it) })
         }
     }
 
     fun setSelectedGenre(genreName: String) {
         _selectedGenre.value = genreName
+    }
+
+    private fun handleErrorResult(workResult: WorkResult<List<Genre>>) {
+        when (workResult) {
+            is WorkResult.Fail -> {
+                if (workResult.exception is NetworkException) {
+                    _networkError.postValue(true)
+                }
+            }
+            else -> {}
+        }
     }
 }
