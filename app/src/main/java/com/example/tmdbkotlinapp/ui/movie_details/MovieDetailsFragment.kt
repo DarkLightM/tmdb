@@ -109,8 +109,8 @@ class MovieDetailsFragment :
                         requireContext(), R.color.dark_blue
                     )
                 )
-                binding.likeButton.setBackgroundResource(R.drawable.ripple_selector_tapped)
-                binding.likeButton.setOnClickListener {
+                binding.likeIcon.setImageResource(R.drawable.ic_like_tapped)
+                binding.likeBcg.setOnClickListener {
                     viewModel.deleteMovieFromDb()
                 }
             }
@@ -121,8 +121,8 @@ class MovieDetailsFragment :
                         requireContext(), R.color.white
                     )
                 )
-                binding.likeButton.setBackgroundResource(R.drawable.ripple_selector_untapped)
-                binding.likeButton.setOnClickListener {
+                binding.likeIcon.setImageResource(R.drawable.ic_like_untapped)
+                binding.likeBcg.setOnClickListener {
                     viewModel.saveMovieInDb()
                 }
             }
@@ -136,7 +136,7 @@ class MovieDetailsFragment :
             movieRating.isVisible = true
             ratingBcg.isVisible = true
             likeBcg.isVisible = true
-            likeButton.isVisible = true
+            likeIcon.isVisible = true
             movieDescription.isVisible = true
             castRecyclerView.isVisible = true
             genreRecyclerView.isVisible = true
@@ -151,7 +151,7 @@ class MovieDetailsFragment :
             movieRating.isInvisible = true
             ratingBcg.isInvisible = true
             likeBcg.isInvisible = true
-            likeButton.isInvisible = true
+            likeIcon.isInvisible = true
             movieDescription.isInvisible = true
             castRecyclerView.isInvisible = true
             genreRecyclerView.isInvisible = true
